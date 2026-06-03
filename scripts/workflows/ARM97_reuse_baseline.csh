@@ -351,7 +351,7 @@ set ELM_CONFIG_OPTS="-phys elm"
     if ($?TEMPLATE_EXE_NERSC) then
       setenv TEMPLATE_EXE $TEMPLATE_EXE_NERSC
     else
-      setenv TEMPLATE_EXE /path/to/nersc/baseline/build/e3sm.exe
+      setenv TEMPLATE_EXE /pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe
     endif
   endif
   set template_exe = $TEMPLATE_EXE

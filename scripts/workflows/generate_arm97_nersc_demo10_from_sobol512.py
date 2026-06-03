@@ -68,6 +68,7 @@ SCRIPT_DIR=$(cd "${{SLURM_SUBMIT_DIR:-$(dirname "${{BASH_SOURCE[0]}}")}}" && pwd
 MANIFEST="${{SCRIPT_DIR}}/{manifest_name}"
 STATUS_CSV="${{SCRIPT_DIR}}/nersc_demo10_setup_status.csv"
 MAX_SETUP_JOBS="${{MAX_SETUP_JOBS:-8}}"
+export TEMPLATE_EXE_NERSC="${{TEMPLATE_EXE_NERSC:-/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe}}"
 
 echo "case,script,status,start_epoch,end_epoch,wall_seconds" > "${{STATUS_CSV}}"
 
@@ -190,7 +191,12 @@ sbatch run_bundle_nersc.sh
 ```
 
 The per-case scripts use `$SCM_RUNS` if set, otherwise `$PSCRATCH/SCM_runs`,
-and link `$TEMPLATE_EXE` if set, otherwise `/path/to/baseline/build/e3sm.exe`.
+and link `$TEMPLATE_EXE` if set, otherwise `$TEMPLATE_EXE_NERSC`. By default,
+`TEMPLATE_EXE_NERSC` points to:
+
+```bash
+/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe
+```
 """
     )
 

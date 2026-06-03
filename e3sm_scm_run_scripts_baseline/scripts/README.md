@@ -24,7 +24,7 @@ DRY_RUN=1 ./build_nersc_reusable_e3sm.sh
 When the build succeeds, the script prints the reusable executable path:
 
 ```sh
-export TEMPLATE_EXE_NERSC="${SCM_RUNS}/nersc_ARM97_reusable_baseline/build/e3sm.exe"
+export TEMPLATE_EXE_NERSC="/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe"
 ```
 
 Use that `TEMPLATE_EXE_NERSC` value before running NERSC setup scripts generated

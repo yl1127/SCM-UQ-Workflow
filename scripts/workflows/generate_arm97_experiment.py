@@ -290,6 +290,7 @@ STATUS_CSV="${{SCRIPT_DIR}}/nersc_setup_status.csv"
 MAX_SETUP_JOBS="${{MAX_SETUP_JOBS:-8}}"
 
 export SCM_RUNS="${{SCM_RUNS:-${{PSCRATCH}}/SCM_runs}}"
+export TEMPLATE_EXE_NERSC="${{TEMPLATE_EXE_NERSC:-/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe}}"
 
 if [[ -z "${{E3SM_CODE_DIR:-}}" ]]; then
   echo "ERROR: set E3SM_CODE_DIR to your E3SM checkout on NERSC." >&2

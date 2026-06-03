@@ -55,7 +55,12 @@ Important variables:
 The reused executable is platform-specific. The repository-local Mac baseline
 executable is a macOS arm64 binary and can speed up Mac runs, but it cannot run
 on NERSC Linux nodes. For NERSC, build or keep a separate baseline executable on
-NERSC and point `TEMPLATE_EXE_NERSC` or `TEMPLATE_EXE` at that file.
+NERSC and point `TEMPLATE_EXE_NERSC` or `TEMPLATE_EXE` at that file. The current
+NERSC reusable ARM97 baseline is:
+
+```sh
+export TEMPLATE_EXE_NERSC="/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe"
+```
 
 ## Run
 
@@ -182,7 +187,7 @@ On NERSC, from that generated directory, set machine-specific paths:
 ```sh
 export SCM_RUNS="${PSCRATCH}/SCM_runs"
 export E3SM_CODE_DIR="/path/to/E3SM"
-export TEMPLATE_EXE_NERSC="/path/to/nersc/baseline/build/e3sm.exe"
+export TEMPLATE_EXE_NERSC="/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe"
 ```
 
 Set up the E3SM cases:
