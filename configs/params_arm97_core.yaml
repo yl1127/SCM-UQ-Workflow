@@ -1,0 +1,62 @@
+description: ARM97 EAM parameters prioritized from the Qian/Wuyin E3SM UQ paper, with workflow guidance from the Nathan/Jiang UQ framework.
+parameters:
+  - name: clubb_C1
+    baseline: 1.335
+    lower: 1.0
+    upper: 5.0
+    format: float
+    note: CLUBB; high sensitivity for cloud forcing and low clouds.
+  - name: clubb_C8
+    baseline: 4.3
+    lower: 2.0
+    upper: 8.0
+    format: float
+    note: CLUBB; cloud forcing and low-cloud sensitivity.
+  - name: clubb_gamma_coef
+    baseline: 0.32
+    lower: 0.1
+    upper: 0.5
+    format: float
+    note: CLUBB; cloud forcing and low-cloud sensitivity.
+  - name: clubb_c_K10
+    baseline: 0.3
+    lower: 0.3
+    upper: 1.2
+    format: float
+    note: CLUBB K10; affects TMQ and evaporation-related behavior.
+  - name: cldfrc_dp1
+    baseline: 0.045
+    lower: 0.02
+    upper: 0.1
+    format: D0
+    note: Cloud fraction parameter; radiation and convection/cloud-fraction sensitivity.
+  - name: cldfrc2m_rhmaxi
+    baseline: 1.05
+    lower: 1.0
+    upper: 1.1
+    format: D0
+    note: High-cloud/ice-cloud related sensitivity.
+  - name: ice_sed_ai
+    baseline: 500.0
+    lower: 350.0
+    upper: 1400.0
+    format: float
+    note: Ice sedimentation; high-cloud/ice-cloud related sensitivity.
+  - name: zmconv_dmpdz
+    baseline: -0.0007
+    lower: -0.0014
+    upper: -0.00035
+    format: e
+    note: ZM convection; perturb around the current negative baseline value.
+  - name: zmconv_c0_lnd
+    baseline: 0.007
+    lower: 0.001
+    upper: 0.007
+    format: float
+    note: ZM convection land coefficient; default script already uses the high end.
+  - name: zmconv_c0_ocn
+    baseline: 0.007
+    lower: 0.001
+    upper: 0.007
+    format: float
+    note: ZM convection ocean coefficient; default script already uses the high end.

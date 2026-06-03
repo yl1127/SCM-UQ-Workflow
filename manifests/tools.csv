@@ -1,0 +1,35 @@
+stage,tool,path,purpose
+design,generic_arm97_experiment,scripts/workflows/generate_arm97_experiment.py,Generate ARM97 segmented experiment scripts and designs
+design,qmc64_segmented,scripts/workflows/generate_qmc64_segmented_scripts.py,Generate segmented scripts from the QMC64 design
+design,nersc_demo10,scripts/workflows/generate_arm97_nersc_demo10_from_sobol512.py,Generate NERSC demo10 scripts from Sobol512 samples
+design,qmc_design,scripts/workflows/generate_e3sm_scm_qmc_design.py,Generate original 64-sample QMC design
+case_generation,qmc_scripts,scripts/workflows/generate_e3sm_scm_qmc_run_scripts.py,Render original QMC case scripts
+case_generation,qmc_reuse_scripts,scripts/workflows/generate_e3sm_scm_qmc_reuse_build_run_scripts.py,Render QMC reuse-build case scripts
+case_generation,oat8_reuse_scripts,scripts/workflows/generate_oat8_sensitive_reuse_build_design_and_scripts.py,Render OAT8 sensitivity design and scripts
+case_generation,mac_segments,scripts/workflows/generate_mac_arm97_segment_scripts.py,Render standalone Mac ARM97 segment scripts
+run_control,qmc_run,scripts/workflows/run_qmc_e3sm_scm_scripts.zsh,Run original QMC cases sequentially
+run_control,qmc_reuse_run,scripts/workflows/run_qmc_reuse_build_scripts.zsh,Run QMC reuse-build cases
+run_control,qmc_reuse_benchmark,scripts/workflows/run_qmc_reuse_build_benchmark.zsh,Benchmark selected QMC reuse-build cases
+run_control,oat8_run,scripts/workflows/run_oat8_sensitive_reuse_build_scripts.zsh,Run OAT8 sensitivity cases
+run_control,mac_segments_parallel,scripts/workflows/run_mac_arm97_segments_parallel.zsh,Run standalone Mac ARM97 segments in parallel
+run_control,generic_segment_runner,scripts/workflows/run_arm97_experiment_segments_parallel.zsh,Run segmented experiments from a manifest
+run_control,mac_parallel_benchmark,scripts/workflows/run_mac_scm_parallel_benchmark.zsh,Benchmark local Mac SCM parallelism
+postprocess,stitch_mac_segments,scripts/workflows/stitch_mac_arm97_segments.py,Stitch Mac ARM97 segment histories
+postprocess,postprocess_demo10_mac,scripts/workflows/postprocess_arm97_sobol_demo10.py,Postprocess Mac Sobol demo10 segmented histories
+postprocess,postprocess_demo10_nersc,scripts/workflows/postprocess_arm97_sobol_demo10_nersc.py,Postprocess downloaded NERSC demo10 histories
+qc,qc_demo10_mac,scripts/workflows/qc_arm97_sobol_demo10.py,QC Mac demo10 metrics and parameter responses
+qc,qc_demo10_nersc,scripts/workflows/qc_arm97_sobol_demo10_nersc.py,QC NERSC demo10 metrics and parameter responses
+analysis,analyze_qmc,scripts/workflows/analyze_qmc_results.py,Analyze QMC results
+analysis,analyze_oat8,scripts/workflows/analyze_oat8_sensitive_results.py,Analyze OAT8 sensitivity results
+analysis,analyze_stage1,scripts/workflows/analyze_e3sm_scm_stage1.py,Analyze stage1 SCM outputs
+comparison,baseline_vs_observation,scripts/workflows/compare_arm97_baseline_vs_observation.py,Compare baseline ARM97 output against observation
+comparison,stitched_vs_baseline,scripts/workflows/compare_mac_arm97_stitched_vs_baseline.py,Compare stitched Mac ARM97 output against baseline
+comparison,oat8_vs_qmc_timing,scripts/workflows/compare_oat8_reuse_vs_qmc_timing.py,Compare OAT8 and QMC timing records
+comparison,qmc_reuse_timing,scripts/workflows/compare_qmc_reuse_build_timing.py,Parse QMC reuse-build timing
+visualization,plot_stitched_vs_baseline,scripts/workflows/plot_mac_arm97_stitched_vs_baseline.py,Plot stitched-vs-baseline figures
+visualization,plot_stitched_vs_observation,scripts/workflows/plot_mac_arm97_stitched_vs_observation.py,Plot stitched-vs-observation figures
+notebook,baseline_observation_notebook,scripts/create_baseline_observation_interactive_notebook.py,Generate baseline-vs-observation interactive notebook
+notebook,stitched_observation_notebook,scripts/create_stitched_observation_interactive_notebook.py,Generate stitched-vs-observation interactive notebook
+notebook,iop_observation_notebook,scripts/create_iop_interactive_notebook.py,Generate ARM97 IOP interactive notebook
+notebook,qmc_scatter_notebook,scripts/create_qmc_interactive_scatter_notebook.py,Generate QMC interactive scatter notebook
+presentation,workflow_deck,scripts/workflows/build_arm97_workflow_ppt.js,Build ARM97 SCM-UQ workflow PowerPoint deck

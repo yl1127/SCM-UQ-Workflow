@@ -1,0 +1,12 @@
+matplotlib
+nbformat
+netCDF4
+numpy
+pandas
+plotly
+PyYAML
+qmcpy
+scipy
+scikit-learn
+xarray
+ipywidgets

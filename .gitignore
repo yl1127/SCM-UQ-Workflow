@@ -1,0 +1,29 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.local_cache/
+
+# Generated workflow outputs
+analysis_outputs/
+arm97_experiments/
+arm97_experiments_*/
+nersc_experiments_*/
+baseline_arm97_comparison/
+e3sm_scm_mac_arm97_segment_scripts/
+e3sm_scm_oat8_sensitive_reuse_build_scripts/
+e3sm_scm_qmc_run_scripts/
+e3sm_scm_qmc_run_scripts_reuse_build/
+mac_arm97_segment_design/
+mac_parallel_benchmark/
+notebooks/*.ipynb
+oat8_analysis/
+oat8_sensitive_design/
+presentation_outputs/
+qmc_analysis/
+qmc_design/
+stage1_design/
+
+# Local environment files
+.env
+node_modules/

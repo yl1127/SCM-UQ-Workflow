@@ -1,0 +1,19 @@
+name: scm-uq-workflow
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - matplotlib
+  - nbformat
+  - netcdf4
+  - numpy
+  - pandas
+  - plotly
+  - pyyaml
+  - scipy
+  - scikit-learn
+  - xarray
+  - ipywidgets
+  - pip
+  - pip:
+      - qmcpy

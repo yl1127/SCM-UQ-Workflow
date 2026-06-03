@@ -1,0 +1,101 @@
+description: 14 PPE tuning parameters and ranges transcribed from tuning-parameters-from-PPE-paper copy.docx.
+source: tuning-parameters-from-PPE-paper copy.docx
+parameters:
+  - name: cldfrc_dp1
+    ppe_name: dp1
+    baseline: 0.1
+    lower: 0.02
+    upper: 0.1
+    format: D0
+    note: Deep convection cloud fraction parameter; PPE row 3; cldfrc_/clubb_intr.
+  - name: zmconv_dmpdz
+    ppe_name: dmpdz
+    baseline: -0.0005
+    lower: -0.002
+    upper: -0.0001
+    format: e
+    note: Parcel fractional mass entrainment rate; PPE row 4; zmconv_/zm_conv.
+  - name: zmconv_ke
+    ppe_name: ke
+    baseline: 0.000001
+    lower: 0.0000005
+    upper: 0.00001
+    format: E
+    note: Evaporation efficiency of precipitation; PPE row 5; zmconv_/zm_conv.
+  - name: zmconv_alfa
+    ppe_name: alfa
+    baseline: 0.10
+    lower: 0.05
+    upper: 0.60
+    format: float
+    note: Maximum cloud downdraft mass flux fraction; PPE row 6; zmconv_/zm_conv.
+  - name: zmconv_tau
+    ppe_name: tau
+    baseline: 3600.0
+    lower: 1800.0
+    upper: 14400.0
+    format: float
+    note: Time scale for consumption rate deep CAPE; PPE row 7; zmconv_/zm_conv.
+  - name: cldfrc2m_rhmaxi
+    ppe_name: rhmaxi
+    baseline: 1.0
+    lower: 1.0
+    upper: 1.1
+    format: D0
+    note: Max relative humidity threshold for ice cloud; PPE row 10; cldfrc2m_/cldfrc2m.
+  - name: clubb_gamma_coef
+    ppe_name: gamma_coef
+    baseline: 0.32
+    lower: 0.1
+    upper: 0.5
+    format: float
+    note: Constant of the width of PDF in w coordinate; PPE row 11; Clubb_/parameters_tunable.
+  - name: clubb_C8
+    ppe_name: c8
+    baseline: 4.2
+    lower: 2.0
+    upper: 8.0
+    format: float
+    note: Constant associated with Newtonian damping; PPE row 12; Clubb_/parameters_tunable.
+  - name: clubb_beta
+    ppe_name: beta
+    baseline: 2.4
+    lower: 1.0
+    upper: 3.0
+    format: float
+    note: Constant related to skewness of theta_l and qt; PPE row 13; Clubb_/parameters_tunable.
+  - name: clubb_C2rt
+    ppe_name: c2rt
+    baseline: 1.0
+    lower: 0.5
+    upper: 2.0
+    format: D0
+    note: Constant with dissipation of variance of total water; PPE row 14; Clubb_/parameters_tunable.
+  - name: clubb_c_K10
+    ppe_name: c_k10
+    baseline: 0.6
+    lower: 0.3
+    upper: 1.2
+    format: float
+    note: Momentum diffusion factor; PPE row 15; Clubb_/parameters_tunable.
+  - name: clubb_C1
+    ppe_name: c1
+    baseline: 1.0
+    lower: 1.0
+    upper: 5.0
+    format: float
+    note: Constant associated with dissipation of variance; PPE row 16; Clubb_/parameters_tunable.
+  - name: clubb_C6rt
+    ppe_name: c6rt
+    baseline: 4.0
+    lower: 3.0
+    upper: 8.0
+    format: float
+    note: Low skewness Newtonian damping of water flux; PPE row 17; Clubb_/parameters_tunable.
+  - name: effgw_oro
+    ppe_name: effgw_oro
+    baseline: 0.3
+    lower: 0.1
+    upper: 0.4
+    format: float
+    note: Gravity wave drag intensity; PPE row 18; gw_drag.
