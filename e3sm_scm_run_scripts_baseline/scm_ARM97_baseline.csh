@@ -51,7 +51,9 @@
 #  EXAMPLE:
   # module load python # disabled on local Mac; use system python via PATH
 
-  if ($?SCM_UQ_EXTRA_PATH) setenv PATH ${SCM_UQ_EXTRA_PATH}:$PATH
+  if ($?SCM_UQ_EXTRA_PATH) then
+    setenv PATH ${SCM_UQ_EXTRA_PATH}:$PATH
+  endif
 
 ####### END USER DEFINED SETTINGS
 ####### Likely POSSIBLE EXCEPTION (not limited to):  

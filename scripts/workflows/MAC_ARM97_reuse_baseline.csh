@@ -51,7 +51,9 @@
 #  EXAMPLE:
   # module load python # disabled on local Mac; use system python via PATH
 
-  if ($?SCM_UQ_EXTRA_PATH) setenv PATH ${SCM_UQ_EXTRA_PATH}:$PATH
+  if ($?SCM_UQ_EXTRA_PATH) then
+    setenv PATH ${SCM_UQ_EXTRA_PATH}:$PATH
+  endif
   # The reused qmc_ARM97_baseline executable was built in a "nothreads"
   # configuration, so keep OpenMP at 1 thread and avoid oversubscription.
   setenv OMP_NUM_THREADS 1
