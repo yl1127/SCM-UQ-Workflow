@@ -47,6 +47,8 @@ Important variables:
 - `SCM_RUNS` - directory containing E3SM SCM case directories.
 - `E3SM_CODE_DIR` - E3SM source checkout used by generated case scripts.
 - `ARM97_IOP_FILE` - ARM97 IOP forcing/observation NetCDF file.
+- `SCM_BASELINE_HISTORY_FILE` - baseline EAM history NetCDF used by
+  comparison and plotting tools.
 - `TEMPLATE_EXE` - optional pre-built E3SM executable for reuse-build workflows.
 - `TEMPLATE_EXE_MAC` - optional Mac-specific pre-built executable.
 - `TEMPLATE_EXE_NERSC` - optional NERSC-specific pre-built executable.

@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 os.environ.setdefault("MPLCONFIGDIR", str(ROOT / ".local_cache/matplotlib-cache"))
+os.environ.setdefault("XDG_CACHE_HOME", str(ROOT / ".local_cache"))
 
 import matplotlib
 
@@ -18,11 +19,14 @@ import pandas as pd
 from netCDF4 import Dataset, num2date
 
 
-BASELINE = (
-    Path(os.environ.get("SCM_RUNS", "/path/to/SCM_runs"))
-    / "scm_ARM97_baseline/run/case_scripts.eam.h0.1997-06-19-84585.nc"
+DEFAULT_BASELINE_HISTORY = (
+    ROOT
+    / "e3sm_scm_run_scripts_baseline/baseline-output/scm_ARM97_baseline/run"
+    / "case_scripts.eam.h0.1997-06-19-84585.nc"
 )
-OBSERVATION = Path(os.environ.get("ARM97_IOP_FILE", "/path/to/ARM97_iopfile_4scam.nc"))
+DEFAULT_OBSERVATION = ROOT / "e3sm_scm_run_scripts_baseline/ARM97_iopfile_4scam.nc"
+BASELINE = Path(os.environ.get("SCM_BASELINE_HISTORY_FILE", DEFAULT_BASELINE_HISTORY))
+OBSERVATION = Path(os.environ.get("ARM97_IOP_FILE", DEFAULT_OBSERVATION))
 OUT_DIR = ROOT / "baseline_arm97_comparison"
 FIG_DIR = OUT_DIR / "figures"
 SURFACE_SUMMARY_CSV = OUT_DIR / "baseline_vs_observation_surface_summary.csv"

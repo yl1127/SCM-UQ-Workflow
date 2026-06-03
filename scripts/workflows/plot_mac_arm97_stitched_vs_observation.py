@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 os.environ.setdefault("MPLCONFIGDIR", str(ROOT / ".local_cache/matplotlib-cache"))
+os.environ.setdefault("XDG_CACHE_HOME", str(ROOT / ".local_cache"))
 
 import matplotlib
 
@@ -19,7 +20,8 @@ from netCDF4 import Dataset, num2date
 
 
 STITCHED = ROOT / "mac_arm97_segment_design/mac_ARM97_26day_stitched_from_segments.nc"
-OBSERVATION = Path(os.environ.get("ARM97_IOP_FILE", "/path/to/ARM97_iopfile_4scam.nc"))
+DEFAULT_OBSERVATION = ROOT / "e3sm_scm_run_scripts_baseline/ARM97_iopfile_4scam.nc"
+OBSERVATION = Path(os.environ.get("ARM97_IOP_FILE", DEFAULT_OBSERVATION))
 OUT_DIR = ROOT / "mac_arm97_segment_design/comparison/figures_observation"
 SUMMARY_CSV = ROOT / "mac_arm97_segment_design/comparison/stitched_vs_observation_summary.csv"
 

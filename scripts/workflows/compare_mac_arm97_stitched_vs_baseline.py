@@ -9,10 +9,12 @@ from netCDF4 import Dataset, num2date
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASELINE = (
-    Path(os.environ.get("SCM_RUNS", "/path/to/SCM_runs"))
-    / "qmc_ARM97_baseline/run/case_scripts.eam.h0.1997-06-19-84585.nc"
+DEFAULT_BASELINE_HISTORY = (
+    ROOT
+    / "e3sm_scm_run_scripts_baseline/baseline-output/scm_ARM97_baseline/run"
+    / "case_scripts.eam.h0.1997-06-19-84585.nc"
 )
+BASELINE = Path(os.environ.get("SCM_BASELINE_HISTORY_FILE", DEFAULT_BASELINE_HISTORY))
 STITCHED = ROOT / "mac_arm97_segment_design/mac_ARM97_26day_stitched_from_segments.nc"
 OUT_DIR = ROOT / "mac_arm97_segment_design/comparison"
 SUMMARY_CSV = OUT_DIR / "stitched_vs_baseline_variable_differences.csv"

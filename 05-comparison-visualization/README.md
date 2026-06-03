@@ -3,6 +3,11 @@
 These tools compare model output against baselines, observations, or timing
 records, and generate figures and summary CSVs.
 
+By default, the ARM97 observation and baseline comparison scripts use the
+repository-local files under `e3sm_scm_run_scripts_baseline/`. Override them
+with `ARM97_IOP_FILE` and `SCM_BASELINE_HISTORY_FILE` when comparing against a
+different observation file or baseline history.
+
 | Tool | Purpose | Main outputs |
 | --- | --- | --- |
 | `scripts/workflows/compare_arm97_baseline_vs_observation.py` | Compare baseline ARM97 SCM output with the ARM97 observation file. | `baseline_arm97_comparison/` |
