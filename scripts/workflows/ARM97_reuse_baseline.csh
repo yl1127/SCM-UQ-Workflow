@@ -347,7 +347,13 @@ set ELM_CONFIG_OPTS="-phys elm"
   ./xmlchange CICE_CONFIG_OPTS="-nodecomp -maxblocks 1 -nx 1 -ny 1"
 
 # Reuse a pre-built executable from the baseline case; skip rebuilding the model.
-  if (! $?TEMPLATE_EXE) setenv TEMPLATE_EXE /path/to/baseline/build/e3sm.exe
+  if (! $?TEMPLATE_EXE) then
+    if ($?TEMPLATE_EXE_NERSC) then
+      setenv TEMPLATE_EXE $TEMPLATE_EXE_NERSC
+    else
+      setenv TEMPLATE_EXE /path/to/nersc/baseline/build/e3sm.exe
+    endif
+  endif
   set template_exe = $TEMPLATE_EXE
   if (! -e $template_exe) then
     echo "ERROR: template executable not found: $template_exe"

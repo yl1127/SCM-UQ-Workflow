@@ -8,9 +8,8 @@ Before publishing this folder as a GitHub repository:
 - Run the static checks:
 
 ```sh
-python3 -m py_compile scripts/*.py scripts/workflows/*.py
+python3 -m py_compile scripts/workflows/*.py
 for f in scripts/workflows/*.zsh; do zsh -n "$f"; done
-node --check scripts/workflows/build_arm97_workflow_ppt.js
 ```
 
 - Avoid committing generated model outputs, downloaded NetCDF histories, logs, cache files, or local `.env`.

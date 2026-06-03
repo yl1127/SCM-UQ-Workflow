@@ -14,12 +14,13 @@ e3sm_scm_mac_arm97_segment_scripts/
 e3sm_scm_oat8_sensitive_reuse_build_scripts/
 e3sm_scm_qmc_run_scripts/
 e3sm_scm_qmc_run_scripts_reuse_build/
+e3sm_scm_run_scripts_baseline/*.nc
+e3sm_scm_run_scripts_baseline/*.build_only.csh
+e3sm_scm_run_scripts_baseline/baseline-output/
 mac_arm97_segment_design/
 mac_parallel_benchmark/
-notebooks/*.ipynb
 oat8_analysis/
 oat8_sensitive_design/
-presentation_outputs/
 qmc_analysis/
 qmc_design/
 stage1_design/

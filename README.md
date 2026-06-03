@@ -3,7 +3,7 @@
 Workflow tools for ARM97 E3SM single-column model uncertainty quantification
 experiments. This repository contains the code, templates, configuration, and
 documentation needed to regenerate designs, render E3SM case scripts, launch
-runs, postprocess outputs, run QC, and build notebooks/figures/decks.
+runs, postprocess outputs, run QC, and build figures.
 
 It intentionally does not include generated model output, downloaded NetCDF
 history files, E3SM source code, or machine-local inputdata.
@@ -15,10 +15,8 @@ history files, E3SM source code, or machine-local inputdata.
 3. `03-run-control/` - local Mac and NERSC run orchestration helpers.
 4. `04-postprocess-qc/` - stitching, metrics extraction, QC, and sensitivity analysis tools.
 5. `05-comparison-visualization/` - comparison and plotting scripts.
-6. `06-notebook-tools/` - scripts that generate interactive notebooks.
-7. `07-presentation/` - deck-building tool.
-8. `templates/` - notes about E3SM template scripts used by generators.
-9. `manifests/` - machine-readable tool inventory.
+6. `templates/` - notes about E3SM template scripts used by generators.
+7. `manifests/` - machine-readable tool inventory.
 
 ## Install
 
@@ -33,12 +31,6 @@ or with conda:
 ```sh
 conda env create -f environment.yml
 conda activate scm-uq-workflow
-```
-
-Presentation generation uses Node:
-
-```sh
-npm install
 ```
 
 ## Configure
@@ -56,7 +48,14 @@ Important variables:
 - `E3SM_CODE_DIR` - E3SM source checkout used by generated case scripts.
 - `ARM97_IOP_FILE` - ARM97 IOP forcing/observation NetCDF file.
 - `TEMPLATE_EXE` - optional pre-built E3SM executable for reuse-build workflows.
+- `TEMPLATE_EXE_MAC` - optional Mac-specific pre-built executable.
+- `TEMPLATE_EXE_NERSC` - optional NERSC-specific pre-built executable.
 - `SCM_UQ_EXTRA_PATH` - optional compiler/runtime binary path additions.
+
+The reused executable is platform-specific. The repository-local Mac baseline
+executable is a macOS arm64 binary and can speed up Mac runs, but it cannot run
+on NERSC Linux nodes. For NERSC, build or keep a separate baseline executable on
+NERSC and point `TEMPLATE_EXE_NERSC` or `TEMPLATE_EXE` at that file.
 
 ## Run
 
@@ -183,7 +182,7 @@ On NERSC, from that generated directory, set machine-specific paths:
 ```sh
 export SCM_RUNS="${PSCRATCH}/SCM_runs"
 export E3SM_CODE_DIR="/path/to/E3SM"
-export TEMPLATE_EXE="/path/to/baseline/build/e3sm.exe"
+export TEMPLATE_EXE_NERSC="/path/to/nersc/baseline/build/e3sm.exe"
 ```
 
 Set up the E3SM cases:

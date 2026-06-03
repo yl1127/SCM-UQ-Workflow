@@ -50,13 +50,3 @@ python3 scripts/workflows/compare_qmc_reuse_build_timing.py
 python3 scripts/workflows/plot_mac_arm97_stitched_vs_baseline.py
 python3 scripts/workflows/plot_mac_arm97_stitched_vs_observation.py
 ```
-
-## Notebook and Presentation Builders
-
-```sh
-python3 scripts/create_baseline_observation_interactive_notebook.py
-python3 scripts/create_stitched_observation_interactive_notebook.py
-python3 scripts/create_iop_interactive_notebook.py
-python3 scripts/create_qmc_interactive_scatter_notebook.py
-node scripts/workflows/build_arm97_workflow_ppt.js
-```

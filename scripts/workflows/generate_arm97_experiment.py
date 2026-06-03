@@ -296,6 +296,10 @@ if [[ -z "${{E3SM_CODE_DIR:-}}" ]]; then
   exit 2
 fi
 
+if [[ -z "${{TEMPLATE_EXE:-}}" && -n "${{TEMPLATE_EXE_NERSC:-}}" ]]; then
+  export TEMPLATE_EXE="${{TEMPLATE_EXE_NERSC}}"
+fi
+
 if [[ -z "${{TEMPLATE_EXE:-}}" ]]; then
   echo "ERROR: set TEMPLATE_EXE to a pre-built E3SM executable for reuse-build runs." >&2
   exit 2
