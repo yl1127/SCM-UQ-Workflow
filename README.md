@@ -77,6 +77,21 @@ python3 scripts/workflows/generate_qmc64_segmented_scripts.py --help
 The workflow scripts compute the repository root from their own location, but
 running from the root keeps relative output paths and logs predictable.
 
+## Workflow Diagram
+
+```mermaid
+flowchart TD
+  A["Choose parameters and sampling strategy"] --> B["Generate experiment design"]
+  B --> C["Render platform-specific case scripts"]
+  C --> D["Run segmented SCM cases"]
+  D --> E["Collect segment history outputs"]
+  E --> F["Stitch segments into complete cases"]
+  F --> G["Extract metrics and response tables"]
+  G --> H["Compare, visualize, and interpret results"]
+
+  R["Reusable compiled model"] --> D
+```
+
 ## Demo: 70-Sample Mac Reuse-Build Run
 
 This demo is the end-to-end Mac workflow used for a 14-parameter,
