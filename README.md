@@ -77,91 +77,21 @@ python3 scripts/workflows/generate_qmc64_segmented_scripts.py --help
 The workflow scripts compute the repository root from their own location, but
 running from the root keeps relative output paths and logs predictable.
 
-## Example: 14-Parameter QMC Stitched Scripts
-
-This example generates ARM97 Mac scripts for:
-
-- 14 PPE tuning parameters with explicit lower/upper ranges transcribed from
-  `tuning-parameters-from-PPE-paper copy.docx`.
-- QMC sampling with `QMCPy DigitalNetB2`, matching the first QMC method used in
-  this project.
-- Stitched workflow mode, meaning each sample is split into 52 overlapping
-  36-hour segment scripts intended for later stitching.
-- `14 * 50 = 700` QMC samples.
-- Fixed seed: `20260602`.
-
-The parameter range file is:
-
-```text
-examples/params_arm97_14.yaml
-```
-
-The YAML maps the PPE paper names to E3SM namelist names used by the templates,
-for example `dp1 -> cldfrc_dp1`, `dmpdz -> zmconv_dmpdz`,
-`gamma_coef -> clubb_gamma_coef`, and `c6rt -> clubb_C6rt`.
-
-Generate the scripts:
-
-```sh
-python3 scripts/workflows/generate_arm97_experiment.py \
-  --platform mac \
-  --experiment arm97_qmc14x50_stitched_seed20260602 \
-  --design digitalnetb2 \
-  --n-samples 700 \
-  --seed 20260602 \
-  --params examples/params_arm97_14.yaml \
-  --segment-mode 52x1.5day \
-  --out-root arm97_experiments \
-  --case-prefix mac_ARM97_qmc14x50
-```
-
-Expected generated files:
-
-```text
-arm97_experiments/arm97_qmc14x50_stitched_seed20260602/mac/design/arm97_qmc14x50_stitched_seed20260602_samples.csv
-arm97_experiments/arm97_qmc14x50_stitched_seed20260602/mac/design/arm97_qmc14x50_stitched_seed20260602_script_manifest.csv
-arm97_experiments/arm97_qmc14x50_stitched_seed20260602/mac/scripts/*.csh
-```
-
-Expected counts:
-
-```text
-samples: 700
-segment scripts: 700 * 52 = 36400
-seed column in samples CSV: 20260602
-sampler column in samples CSV: QMCPy DigitalNetB2
-```
-
-Run the generated segment scripts with the manifest runner:
-
-```sh
-export SCM_RUNS="/path/to/SCM_runs"
-
-MANIFEST="arm97_experiments/arm97_qmc14x50_stitched_seed20260602/mac/design/arm97_qmc14x50_stitched_seed20260602_script_manifest.csv" \
-MAX_JOBS=52 \
-./scripts/workflows/run_arm97_experiment_segments_parallel.zsh
-```
-
-Notes:
-
-- `--segment-mode 52x1.5day` is the stitched workflow mode. It generates
-  52 segment scripts per QMC sample, with metadata columns showing the kept
-  12-hour window for each segment.
-- `--segment-mode full26day` generates one 26-day script per sample and does
-  not require stitching.
-- `--design digitalnetb2` uses `qmcpy.DigitalNetB2`, the same QMC sampler family
-  used by the original `qmc_design/e3sm_scm_qmc_64_design.csv` workflow.
-- The command above uses 700 samples because the requested design is `14 * 50`.
-- QMCPy `DigitalNetB2` natively draws powers of two. If `--n-samples` is not a
-  power of two, the generator draws the next power of two and truncates to the
-  requested count. For example, `--n-samples 70` draws 128 points and keeps the
-  first 70.
-
 ## Demo: 70-Sample Mac Reuse-Build Run
 
 This demo is the end-to-end Mac workflow used for a 14-parameter,
 70-sample ARM97 experiment. It reuses a pre-built Mac `e3sm.exe`, runs the
 segmented cases, and stitches each sample into one complete 26-day output file.
+It uses:
+
+- 14 PPE tuning parameters from `examples/params_arm97_14.yaml`.
+- QMC sampling with `QMCPy DigitalNetB2`.
+- Fixed seed `20260602`.
+- Stitched mode with 52 overlapping segments per sample.
+
+The parameter YAML maps PPE paper names to E3SM namelist names used by the
+templates, for example `dp1 -> cldfrc_dp1`, `dmpdz -> zmconv_dmpdz`,
+`gamma_coef -> clubb_gamma_coef`, and `c6rt -> clubb_C6rt`.
 
 Generate the experiment scripts:
 
@@ -318,5 +248,4 @@ The generated `run_bundle_nersc.sh` uses one CPU node, `regular` QOS, and a
 
 ## License
 
-No license has been selected in this folder yet. Add a license before publishing
-if you want others to have explicit reuse rights.
+This workflow code is released under the MIT License. See `LICENSE`.

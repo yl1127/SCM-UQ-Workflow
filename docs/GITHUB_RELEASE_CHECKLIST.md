@@ -2,7 +2,7 @@
 
 Before publishing this folder as a GitHub repository:
 
-- Choose and add a license file, for example MIT, BSD-3-Clause, Apache-2.0, or a project-specific license.
+- Confirm the MIT `LICENSE` is still the intended license for this release.
 - Review `examples/env.example` and update paths for the target machine.
 - Confirm the E3SM version and machine assumptions in the `.csh` templates.
 - Run the static checks:
