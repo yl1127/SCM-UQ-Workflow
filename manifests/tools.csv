@@ -15,6 +15,7 @@ run_control,mac_segments_parallel,scripts/workflows/run_mac_arm97_segments_paral
 run_control,generic_segment_runner,scripts/workflows/run_arm97_experiment_segments_parallel.zsh,Run segmented experiments from a manifest
 run_control,mac_parallel_benchmark,scripts/workflows/run_mac_scm_parallel_benchmark.zsh,Benchmark local Mac SCM parallelism
 postprocess,stitch_mac_segments,scripts/workflows/stitch_mac_arm97_segments.py,Stitch Mac ARM97 segment histories
+postprocess,postprocess_arm97_experiment,scripts/workflows/postprocess_arm97_experiment.py,Stitch generated ARM97 segmented experiments and extract metrics
 postprocess,postprocess_demo10_mac,scripts/workflows/postprocess_arm97_sobol_demo10.py,Postprocess Mac Sobol demo10 segmented histories
 postprocess,postprocess_demo10_nersc,scripts/workflows/postprocess_arm97_sobol_demo10_nersc.py,Postprocess downloaded NERSC demo10 histories
 qc,qc_demo10_mac,scripts/workflows/qc_arm97_sobol_demo10.py,QC Mac demo10 metrics and parameter responses

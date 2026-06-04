@@ -157,6 +157,79 @@ Notes:
   requested count. For example, `--n-samples 70` draws 128 points and keeps the
   first 70.
 
+## Demo: 70-Sample Mac Reuse-Build Run
+
+This demo is the end-to-end Mac workflow used for a 14-parameter,
+70-sample ARM97 experiment. It reuses a pre-built Mac `e3sm.exe`, runs the
+segmented cases, and stitches each sample into one complete 26-day output file.
+
+Generate the experiment scripts:
+
+```sh
+python3 scripts/workflows/generate_arm97_experiment.py \
+  --platform mac \
+  --experiment arm97_qmc14x5_stitched_seed20260602 \
+  --design digitalnetb2 \
+  --n-samples 70 \
+  --seed 20260602 \
+  --params examples/params_arm97_14.yaml \
+  --segment-mode 52x1.5day \
+  --out-root arm97_experiments_0602 \
+  --case-prefix mac_ARM97_qmc14x5 \
+  --overwrite
+```
+
+Run the 70 samples with a reused executable:
+
+```sh
+export SCM_RUNS="/Users/yunlong/projects/e3sm/SCM_runs"
+export E3SM_CODE_DIR="/Users/yunlong/projects/e3sm/E3SM"
+export SCM_UQ_EXTRA_PATH="/Users/yunlong/local/gcc11/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/anaconda3/bin"
+
+MANIFEST="arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/arm97_qmc14x5_stitched_seed20260602_script_manifest.csv" \
+STATUS="arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/experiment_run_status_all70.csv" \
+MAX_JOBS=10 \
+./scripts/workflows/run_arm97_experiment_segments_parallel.zsh
+```
+
+The run creates `70 * 52 = 3640` segment cases. If a segment already has a
+history file, the runner records it as `skipped_existing_success` and continues,
+so interrupted or partial runs can be resumed with the same `STATUS` file.
+
+Stitch the 52 segments for each sample into one 26-day file and extract summary
+metrics:
+
+```sh
+python3 scripts/workflows/postprocess_arm97_experiment.py \
+  --experiment-dir arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac \
+  --manifest arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/arm97_qmc14x5_stitched_seed20260602_script_manifest.csv \
+  --samples arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/arm97_qmc14x5_stitched_seed20260602_samples.csv \
+  --status arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/experiment_run_status_all70.csv \
+  --scm-runs "$SCM_RUNS"
+```
+
+Expected successful outputs:
+
+```text
+arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/stitched/*.nc
+arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/metrics/arm97_qmc14x5_stitched_seed20260602_mac_metrics.csv
+arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/metrics/arm97_qmc14x5_stitched_seed20260602_mac_parameter_response.csv
+```
+
+The completed demo produced:
+
+```text
+segment records: 3640 total; 3588 success; 52 skipped_existing_success; 0 failed
+stitched files: 70
+time records per stitched file: 1249
+stitched time range: 1997-06-19 23:29:45 to 1997-07-15 23:29:45
+```
+
+In stitched mode, each segment runs for 36 hours. The first 24 hours are
+discarded as spinup, and the final 12-hour window is kept. With half-hourly
+history output and duplicate boundary times removed, 52 kept windows produce a
+complete 26-day sample.
+
 ## NERSC Small-Batch Test Before Full Run
 
 Before running the full 70-sample experiment on NERSC, generate a small test
@@ -241,7 +314,6 @@ The generated `run_bundle_nersc.sh` uses one CPU node, `regular` QOS, and a
 - Full tool inventory: `manifests/tools.csv`
 - One-page command reference: `00-overview/COMMANDS.md`
 - Workflow scripts: `scripts/workflows/`
-- Notebook builders: `scripts/`
 - GitHub release checklist: `docs/GITHUB_RELEASE_CHECKLIST.md`
 
 ## License

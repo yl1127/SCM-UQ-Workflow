@@ -31,6 +31,7 @@ MANIFEST="arm97_experiments/qmc64_segmented/mac/design/qmc64_segmented_script_ma
 
 ```sh
 python3 scripts/workflows/stitch_mac_arm97_segments.py
+python3 scripts/workflows/postprocess_arm97_experiment.py --help
 python3 scripts/workflows/postprocess_arm97_sobol_demo10.py
 python3 scripts/workflows/postprocess_arm97_sobol_demo10_nersc.py
 python3 scripts/workflows/qc_arm97_sobol_demo10.py
