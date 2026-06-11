@@ -1,0 +1,24 @@
+model_variable,observation_source_variables,units_after_conversion,scale_obs,obs_offset,description,model_long_name,model_native_units,observation_long_name,observation_native_units
+TREFHT,Tsair,K,1,0,2 m air temperature,Reference height temperature,K,Ts_Air,K
+TS,Tg,K,1,0,surface/ground temperature,Surface temperature (radiative),K,Ts_Skin,K
+TMQ,prew,kg/m2,10,0,precipitable water,Total (vertically integrated) precipitable water,kg/m2,MWR_precip_water,cm
+CLDTOT,totcld,1,0.01,0,total cloud fraction,Vertically-integrated total cloud,1,GOES_Totcld,%
+CLDLOW,lowcld,1,0.01,0,low cloud fraction,Vertically-integrated low cloud,1,GOES_Lowcld,%
+CLDMED,midcld,1,0.01,0,mid-level cloud fraction,Vertically-integrated mid-level cloud,1,GOES_Midcld,%
+CLDHGH,hghcld,1,0.01,0,high cloud fraction,Vertically-integrated high cloud,1,GOES_Hghcld,%
+PS,Ps,Pa,1,0,surface pressure,Surface pressure,Pa,Area_Mean_Ps,Pa
+LHFLX,lhflx,W/m2,1,0,latent heat flux,Surface latent heat flux,W/m2,surface LH,W/m2
+SHFLX,shflx,W/m2,1,0,sensible heat flux,Surface sensible heat flux,W/m2,surface SH ,W/m2
+FSNS,"srfswdn, srfswup",W/m2,1,0,surface net shortwave flux,Net solar flux at surface,W/m2,Siros_Srf_SWDN; Siros_Srf_SWUP,W/m2; W/m2
+FLNS,"srflwup, srflwdn",W/m2,1,0,surface net longwave flux,Net longwave flux at surface,W/m2,Siros_Srf_LWUP; Siros_Srf_LWDN,W/m2; W/m2
+FSDS,srfswdn,W/m2,1,0,surface downwelling shortwave flux,Downwelling solar flux at surface,W/m2,Siros_Srf_SWDN,W/m2
+FLDS,srflwdn,W/m2,1,0,surface downwelling longwave flux,Downwelling longwave flux at surface,W/m2,Siros_Srf_LWDN,W/m2
+FLUT,TOA_LWup,W/m2,1,0,TOA upwelling longwave flux,Upwelling longwave flux at top of model,W/m2,TOA_LW_Up,W/m2
+U10,windsrf,m/s,1,0,10 m wind speed,10m wind speed,m/s,Srf_wind_speed,m/s
+PRECT,Prec,m/s,0.001,0,total precipitation rate,Total precipitation rate,m/s,Precipitation,mm/s
+T,T,K,1,0,"temperature, averaged over extra dimensions",Temperature,K,Temp,K
+Q,q,kg/kg,1,0,"specific humidity, averaged over extra dimensions",Specific humidity,kg/kg,H2O_Mixing_Ratio,kg/kg
+U,u,m/s,1,0,"zonal wind, averaged over extra dimensions",Zonal wind,m/s,u_wind,m/s
+V,v,m/s,1,0,"meridional wind, averaged over extra dimensions",Meridional wind,m/s,v_wind,m/s
+OMEGA,omega,Pa/s,1,0,"pressure vertical velocity, averaged over extra dimensions",Vertical velocity (pressure),Pa/s,omega,Pa/s
+RELHUM,rh,%,1,0,"relative humidity, averaged over extra dimensions",Relative humidity,percent,REHUM,%

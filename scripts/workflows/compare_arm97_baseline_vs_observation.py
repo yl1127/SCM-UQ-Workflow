@@ -25,8 +25,10 @@ DEFAULT_BASELINE_HISTORY = (
     / "case_scripts.eam.h0.1997-06-19-84585.nc"
 )
 DEFAULT_OBSERVATION = ROOT / "e3sm_scm_run_scripts_baseline/ARM97_iopfile_4scam.nc"
+DEFAULT_OBS_MAP = ROOT / "notebooks/observed_variable_pairs.csv"
 BASELINE = Path(os.environ.get("SCM_BASELINE_HISTORY_FILE", DEFAULT_BASELINE_HISTORY))
 OBSERVATION = Path(os.environ.get("ARM97_IOP_FILE", DEFAULT_OBSERVATION))
+OBS_MAP = Path(os.environ.get("ARM97_OBS_MAP", DEFAULT_OBS_MAP))
 OUT_DIR = ROOT / "baseline_arm97_comparison"
 FIG_DIR = OUT_DIR / "figures"
 SURFACE_SUMMARY_CSV = OUT_DIR / "baseline_vs_observation_surface_summary.csv"
@@ -36,43 +38,11 @@ PROFILE_SUMMARY_CSV = OUT_DIR / "baseline_vs_observation_profile_summary.csv"
 @dataclass(frozen=True)
 class VarSpec:
     model: str
-    obs: str
+    obs_terms: tuple[str, ...]
     units: str
     scale_obs: float = 1.0
     obs_offset: float = 0.0
     description: str = ""
-
-
-@dataclass(frozen=True)
-class ProfileSpec:
-    model: str
-    obs: str
-    units: str
-    description: str = ""
-
-
-SURFACE_VARS = [
-    VarSpec("TREFHT", "Tsair", "K", description="2 m air temperature"),
-    VarSpec("TS", "Tg", "K", description="surface/ground temperature"),
-    VarSpec("TMQ", "prew", "kg/m2", scale_obs=10.0, description="precipitable water"),
-    VarSpec("CLDTOT", "totcld", "1", scale_obs=0.01, description="total cloud fraction"),
-    VarSpec("PS", "Ps", "Pa", description="surface pressure"),
-    VarSpec("LHFLX", "lhflx", "W/m2", description="latent heat flux"),
-    VarSpec("SHFLX", "shflx", "W/m2", description="sensible heat flux"),
-    VarSpec("FSNS", "srfswdn-srfswup", "W/m2", description="surface net shortwave flux"),
-    VarSpec("FLNS", "srflwup-srflwdn", "W/m2", description="surface net longwave flux"),
-    VarSpec("FSDS", "srfswdn", "W/m2", description="surface downwelling shortwave flux"),
-    VarSpec("FLDS", "srflwdn", "W/m2", description="surface downwelling longwave flux"),
-]
-
-PROFILE_VARS = [
-    ProfileSpec("T", "T", "K", "temperature"),
-    ProfileSpec("Q", "q", "kg/kg", "specific humidity"),
-    ProfileSpec("U", "u", "m/s", "zonal wind"),
-    ProfileSpec("V", "v", "m/s", "meridional wind"),
-    ProfileSpec("OMEGA", "omega", "Pa/s", "pressure vertical velocity"),
-    ProfileSpec("RELHUM", "rh", "%", "relative humidity"),
-]
 
 
 def as_series(var) -> np.ma.MaskedArray:
@@ -87,11 +57,71 @@ def filled(arr: np.ma.MaskedArray) -> np.ndarray:
     return np.asarray(np.ma.asarray(arr, dtype=np.float64).filled(np.nan), dtype=np.float64)
 
 
-def obs_series(ds: Dataset, expression: str) -> np.ma.MaskedArray:
-    if "-" in expression:
-        left, right = expression.split("-", 1)
-        return as_series(ds.variables[left]) - as_series(ds.variables[right])
-    return as_series(ds.variables[expression])
+def load_obs_specs(path: Path) -> list[VarSpec]:
+    df = pd.read_csv(path)
+    specs = []
+    for row in df.itertuples(index=False):
+        terms = tuple(
+            term.strip()
+            for term in str(row.observation_source_variables).replace(";", ",").split(",")
+            if term.strip()
+        )
+        if not terms:
+            continue
+        specs.append(
+            VarSpec(
+                model=str(row.model_variable),
+                obs_terms=terms,
+                units="" if pd.isna(row.units_after_conversion) else str(row.units_after_conversion),
+                scale_obs=float(row.scale_obs),
+                obs_offset=float(row.obs_offset),
+                description="" if pd.isna(row.description) else str(row.description),
+            )
+        )
+    return specs
+
+
+def model_available(ds: Dataset, name: str) -> bool:
+    return name in ds.variables or (name == "PRECT" and {"PRECC", "PRECL"}.issubset(ds.variables))
+
+
+def model_series(ds: Dataset, name: str) -> np.ma.MaskedArray:
+    if name in ds.variables:
+        return as_series(ds.variables[name])
+    if name == "PRECT" and {"PRECC", "PRECL"}.issubset(ds.variables):
+        return as_series(ds.variables["PRECC"]) + as_series(ds.variables["PRECL"])
+    raise KeyError(name)
+
+
+def model_matrix(ds: Dataset, name: str) -> np.ndarray:
+    if name in ds.variables:
+        return np.asarray(ds.variables[name][:], dtype=np.float64).squeeze()
+    if name == "PRECT" and {"PRECC", "PRECL"}.issubset(ds.variables):
+        return (
+            np.asarray(ds.variables["PRECC"][:], dtype=np.float64).squeeze()
+            + np.asarray(ds.variables["PRECL"][:], dtype=np.float64).squeeze()
+        )
+    raise KeyError(name)
+
+
+def obs_available(ds: Dataset, spec: VarSpec) -> bool:
+    return all(term in ds.variables for term in spec.obs_terms)
+
+
+def obs_series(ds: Dataset, spec: VarSpec) -> np.ma.MaskedArray:
+    values = as_series(ds.variables[spec.obs_terms[0]])
+    for term in spec.obs_terms[1:]:
+        values = values - as_series(ds.variables[term])
+    return values * spec.scale_obs + spec.obs_offset
+
+
+def is_profile_spec(baseline: Dataset, obs: Dataset, spec: VarSpec) -> bool:
+    obs_var = obs.variables[spec.obs_terms[0]]
+    if "lev" in getattr(obs_var, "dimensions", ()):
+        return True
+    if spec.model in baseline.variables and "lev" in getattr(baseline.variables[spec.model], "dimensions", ()):
+        return True
+    return False
 
 
 def interpolate_obs(obs_days: np.ndarray, obs_values: np.ndarray, target_days: np.ndarray) -> np.ndarray:
@@ -180,12 +210,15 @@ def main() -> None:
         raise FileNotFoundError(BASELINE)
     if not OBSERVATION.exists():
         raise FileNotFoundError(OBSERVATION)
+    if not OBS_MAP.exists():
+        raise FileNotFoundError(OBS_MAP)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
 
     surface_rows = []
     profile_rows = []
     figure_paths = []
+    specs = load_obs_specs(OBS_MAP)
 
     with Dataset(BASELINE) as baseline, Dataset(OBSERVATION) as obs:
         bt = baseline.variables["time"]
@@ -198,17 +231,20 @@ def main() -> None:
         origin = model_dates[0] - timedelta(days=float(model_days[0]))
         obs_dates = np.array([origin + timedelta(days=float(x)) for x in obs_days])
 
-        for spec in SURFACE_VARS:
-            if spec.model not in baseline.variables:
+        surface_specs = [spec for spec in specs if not is_profile_spec(baseline, obs, spec)]
+        profile_specs = [spec for spec in specs if is_profile_spec(baseline, obs, spec)]
+
+        for spec in surface_specs:
+            if not model_available(baseline, spec.model):
                 print(f"skip {spec.model}: missing baseline variable")
                 continue
-            missing_obs = [name for name in spec.obs.split("-") if name not in obs.variables]
+            missing_obs = [name for name in spec.obs_terms if name not in obs.variables]
             if missing_obs:
                 print(f"skip {spec.model}: missing observation variables {missing_obs}")
                 continue
 
-            model_values = filled(as_series(baseline.variables[spec.model]))
-            obs_native = filled(obs_series(obs, spec.obs)) * spec.scale_obs + spec.obs_offset
+            model_values = filled(model_series(baseline, spec.model))
+            obs_native = filled(obs_series(obs, spec))
             obs_at_model = interpolate_obs(obs_days, obs_native, model_days)
             diff = model_values - obs_at_model
 
@@ -216,7 +252,7 @@ def main() -> None:
             row.update(
                 {
                     "variable": spec.model,
-                    "observation": spec.obs,
+                    "observation": ",".join(spec.obs_terms),
                     "description": spec.description,
                     "units": spec.units,
                 }
@@ -231,23 +267,23 @@ def main() -> None:
         ps = np.asarray(baseline.variables["PS"][:], dtype=np.float64).squeeze()
         model_pressure = hyam[None, :] * p0 + hybm[None, :] * ps[:, None]
 
-        for spec in PROFILE_VARS:
-            if spec.model not in baseline.variables or spec.obs not in obs.variables:
+        for spec in profile_specs:
+            if not model_available(baseline, spec.model) or not obs_available(obs, spec):
                 print(f"skip profile {spec.model}: missing baseline or observation variable")
                 continue
 
-            model_matrix = np.asarray(baseline.variables[spec.model][:], dtype=np.float64).squeeze()
-            obs_matrix = np.asarray(obs.variables[spec.obs][:], dtype=np.float64).squeeze()
+            model_values_by_level = model_matrix(baseline, spec.model)
+            obs_values_by_level = np.asarray(obs.variables[spec.obs_terms[0]][:], dtype=np.float64).squeeze()
 
             for level_index, level_pa in enumerate(obs_levels_pa):
-                model_at_level = interp_model_matrix_to_pressure(model_matrix, model_pressure, float(level_pa))
-                obs_native = obs_matrix[:, level_index]
+                model_at_level = interp_model_matrix_to_pressure(model_values_by_level, model_pressure, float(level_pa))
+                obs_native = obs_values_by_level[:, level_index] * spec.scale_obs + spec.obs_offset
                 obs_at_model = interpolate_obs(obs_days, obs_native, model_days)
                 row = stats(model_at_level, obs_at_model)
                 row.update(
                     {
                         "variable": spec.model,
-                        "observation": spec.obs,
+                        "observation": ",".join(spec.obs_terms),
                         "description": spec.description,
                         "level_pa": float(level_pa),
                         "level_hpa": float(level_pa / 100.0),

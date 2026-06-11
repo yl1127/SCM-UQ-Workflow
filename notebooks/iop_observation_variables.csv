@@ -1,0 +1,71 @@
+,file_label,variable,dtype,dimensions,shape,units,long_name
+0,IOP forcing,lon,float32,lon,1,degrees_E,longitude 
+1,IOP forcing,lat,float32,lat,1,degrees_N,latitude
+2,IOP forcing,lev,float32,lev,35,Pa, pressure
+3,IOP forcing,time,float64,time,2089,day as %Y%m%d.%f,
+4,IOP forcing,tsec,float64,time,2089,seconds,time 
+5,IOP forcing,year,float32,time,2089,na,Year
+6,IOP forcing,month,float32,time,2089,na,Month
+7,IOP forcing,day,float32,time,2089,na,Day
+8,IOP forcing,hour,float32,time,2089,na,Hour
+9,IOP forcing,minute,float32,time,2089,na,Minute
+10,IOP forcing,Ptend,float32,"time, lat, lon",2089 x 1 x 1,Pa/s,Surface Pressure Tendency
+11,IOP forcing,Prec,float32,"time, lat, lon",2089 x 1 x 1,mm/s,Precipitation
+12,IOP forcing,lhflx,float32,"time, lat, lon",2089 x 1 x 1,W/m2,surface LH
+13,IOP forcing,shflx,float32,"time, lat, lon",2089 x 1 x 1,W/m2,surface SH 
+14,IOP forcing,Ps,float32,"time, lat, lon",2089 x 1 x 1,Pa,Area_Mean_Ps
+15,IOP forcing,CF_Ps,float32,"time, lat, lon",2089 x 1 x 1,Pa,Central_Facility_Ps
+16,IOP forcing,Tsair,float32,"time, lat, lon",2089 x 1 x 1,K,Ts_Air
+17,IOP forcing,Tg,float32,"time, lat, lon",2089 x 1 x 1,K,Ts_Skin
+18,IOP forcing,RHsair,float32,"time, lat, lon",2089 x 1 x 1,%,Sfc_Air_RH
+19,IOP forcing,windsrf,float32,"time, lat, lon",2089 x 1 x 1,m/s,Srf_wind_speed
+20,IOP forcing,usrf,float32,"time, lat, lon",2089 x 1 x 1,m/s,u_wind_
+21,IOP forcing,vsrf,float32,"time, lat, lon",2089 x 1 x 1,m/s,v_wind
+22,IOP forcing,NDRsrf,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Srf_Net_Dn_Rad
+23,IOP forcing,TOA_LWup,float32,"time, lat, lon",2089 x 1 x 1,W/m2,TOA_LW_Up
+24,IOP forcing,TOA_SWdn,float32,"time, lat, lon",2089 x 1 x 1,W/m2,TOA_SW_Dn
+25,IOP forcing,TOA_ins,float32,"time, lat, lon",2089 x 1 x 1,W/m2,TOA_Ins
+26,IOP forcing,lowcld,float32,"time, lat, lon",2089 x 1 x 1,%,GOES_Lowcld
+27,IOP forcing,midcld,float32,"time, lat, lon",2089 x 1 x 1,%,GOES_Midcld
+28,IOP forcing,hghcld,float32,"time, lat, lon",2089 x 1 x 1,%,GOES_Hghcld
+29,IOP forcing,totcld,float32,"time, lat, lon",2089 x 1 x 1,%,GOES_Totcld
+30,IOP forcing,cldthk,float32,"time, lat, lon",2089 x 1 x 1,m,Cld_Thickness
+31,IOP forcing,cldht,float32,"time, lat, lon",2089 x 1 x 1,m,Cld_Top_ht
+32,IOP forcing,cldliq,float32,"time, lat, lon",2089 x 1 x 1,m,MWR_Cld_liquid
+33,IOP forcing,dcolH2Odt,float32,"time, lat, lon",2089 x 1 x 1,mm/s,d(Column_H2O)/dt
+34,IOP forcing,colH2OAdv,float32,"time, lat, lon",2089 x 1 x 1,mm/s,Column_H2O_Advection
+35,IOP forcing,evapsrf,float32,"time, lat, lon",2089 x 1 x 1,mm/s,Srf_Evaporation
+36,IOP forcing,dcolDSEdt,float32,"time, lat, lon",2089 x 1 x 1,K,d(Column_Dry_Static_Energy)/dt
+37,IOP forcing,colDSEAdv,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Column_Dry_Static_Energy_Advection
+38,IOP forcing,colRH,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Column_Radiative_Heating
+39,IOP forcing,colLH,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Column_Latent_heating
+40,IOP forcing,omegas,float32,"time, lat, lon",2089 x 1 x 1,mb/hr,omega_surface
+41,IOP forcing,qs,float32,"time, lat, lon",2089 x 1 x 1,kg/kg,qs_surface
+42,IOP forcing,ss,float32,"time, lat, lon",2089 x 1 x 1,K,s_surface
+43,IOP forcing,prew,float32,"time, lat, lon",2089 x 1 x 1,cm,MWR_precip_water
+44,IOP forcing,srflwup,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Siros_Srf_LWUP
+45,IOP forcing,srflwdn,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Siros_Srf_LWDN
+46,IOP forcing,srfswup,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Siros_Srf_SWUP
+47,IOP forcing,srfswdn,float32,"time, lat, lon",2089 x 1 x 1,W/m2,Siros_Srf_SWDN
+48,IOP forcing,alb,float32,"time, lat, lon",2089 x 1 x 1,fraction,ALB
+49,IOP forcing,T,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,K,Temp
+50,IOP forcing,q,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,kg/kg,H2O_Mixing_Ratio
+51,IOP forcing,u,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,m/s,u_wind
+52,IOP forcing,v,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,m/s,v_wind
+53,IOP forcing,omega,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,Pa/s,omega
+54,IOP forcing,WD,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,1/s,Wind_Div
+55,IOP forcing,divT,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,Horizontal_Temp__Advec
+56,IOP forcing,vertdivTx,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,Vertical_T_Adv
+57,IOP forcing,divq,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,kg/kg/s,Horizontal_q_Advec
+58,IOP forcing,vertdivq,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,kg/kg/s,Vertical_q_Advec
+59,IOP forcing,s,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,K,s(Dry_Static_Energy)
+60,IOP forcing,divs,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,Horizontal_s_Advec
+61,IOP forcing,vertdivT,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,Vertical_s_Advec
+62,IOP forcing,ds_dt,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,ds/dt
+63,IOP forcing,dT_dt,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,DT/dt
+64,IOP forcing,dq_dt,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,kg/kg/s,dq/dt
+65,IOP forcing,Q1,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,Q1
+66,IOP forcing,Q2,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,k/s,Q2
+67,IOP forcing,ARSCL_cld,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,%,ARSCL_Cld
+68,IOP forcing,rh,float32,"time, lev, lat, lon",2089 x 35 x 1 x 1,%,REHUM
+69,IOP forcing,bdate,int32,scalar,scalar,yymmdd,baseline date

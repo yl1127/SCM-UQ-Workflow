@@ -124,8 +124,8 @@
 
   set walltime = '00:20:00'
 
-# COSP, set to false unless user really wants it
-  setenv do_cosp  false
+# COSP satellite simulator output
+  setenv do_cosp  true
 
 # Create new case
   ./create_newcase -case $temp_case_scripts_dir -mach $machine -project $PROJECT -compset $compset -res $grid --walltime $walltime
@@ -203,6 +203,7 @@ cat <<EOF >> user_nl_eam
  iopfile = '$input_data_dir/$iop_path/$iop_file'
  mfilt = 10000
  nhtfrq = 1
+ fincl1 = 'PRECT'
  scm_iop_srf_prop = $do_iop_srf_prop 
 !scm_relaxation = $do_scm_relaxation
  iradlw = 1

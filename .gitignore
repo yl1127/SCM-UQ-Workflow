@@ -5,6 +5,7 @@ __pycache__/
 .local_cache/
 
 # Generated workflow outputs
+_cleanup_review_*/
 analysis_outputs/
 arm97_experiments/
 arm97_experiments_*/
