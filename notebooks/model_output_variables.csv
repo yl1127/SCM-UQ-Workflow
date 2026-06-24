@@ -11,305 +11,385 @@
 9,Model output,hybi,float64,ilev,81,,hybrid B coefficient at layer interfaces
 10,Model output,P3_input_dim,int32,P3_input_dim,16,N/A,Input field dimension for p3_main subroutine
 11,Model output,P3_output_dim,int32,P3_output_dim,32,N/A,Output field dimension for p3_main subroutine
-12,Model output,time,float64,time,1249,days since 1997-06-19 23:29:45,time
-13,Model output,date,int32,time,1249,,current date (YYYYMMDD)
-14,Model output,datesec,int32,time,1249,,current seconds of current date
-15,Model output,time_bnds,float64,"time, nbnd",1249 x 2,,time interval endpoints
-16,Model output,date_written,|S1,"time, chars",1249 x 8,,
-17,Model output,time_written,|S1,"time, chars",1249 x 8,,
-18,Model output,ndbase,int32,scalar,scalar,,base day
-19,Model output,nsbase,int32,scalar,scalar,,seconds of base day
-20,Model output,nbdate,int32,scalar,scalar,,base date (YYYYMMDD)
-21,Model output,nbsec,int32,scalar,scalar,,seconds of base date
-22,Model output,mdt,int32,scalar,scalar,s,timestep
-23,Model output,ndcur,int32,time,1249,,current day (from base day)
-24,Model output,nscur,int32,time,1249,,current seconds of current day
-25,Model output,co2vmr,float64,time,1249,,co2 volume mixing ratio
-26,Model output,ch4vmr,float64,time,1249,,ch4 volume mixing ratio
-27,Model output,n2ovmr,float64,time,1249,,n2o volume mixing ratio
-28,Model output,f11vmr,float64,time,1249,,f11 volume mixing ratio
-29,Model output,f12vmr,float64,time,1249,,f12 volume mixing ratio
-30,Model output,sol_tsi,float64,time,1249,W/m2,total solar irradiance
-31,Model output,nsteph,int32,time,1249,,current timestep
-32,Model output,AEROD_v,float32,"time, ncol",1249 x 1,1,Total Aerosol Optical Depth in visible band
-33,Model output,ANRAIN,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average rain number conc
-34,Model output,ANSNOW,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average snow number conc
-35,Model output,AODALL,float32,"time, ncol",1249 x 1,,AOD 550 nm for all time and species
-36,Model output,AODDUST1,float32,"time, ncol",1249 x 1,,Aerosol optical depth 550 nm model 1 from dust
-37,Model output,AODDUST3,float32,"time, ncol",1249 x 1,,Aerosol optical depth 550 nm model 3 from dust
-38,Model output,AODVIS,float32,"time, ncol",1249 x 1,,Aerosol optical depth 550 nm
-39,Model output,AQRAIN,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Average rain mixing ratio
-40,Model output,AQSNOW,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Average snow mixing ratio
-41,Model output,AREI,float32,"time, lev, ncol",1249 x 80 x 1,Micron,Average ice effective radius
-42,Model output,AREL,float32,"time, lev, ncol",1249 x 80 x 1,Micron,Average droplet effective radius
-43,Model output,AWNC,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average cloud water number conc
-44,Model output,AWNI,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average cloud ice number conc
-45,Model output,BURDEN1,float32,"time, ncol",1249 x 1,kg/m2,Aerosol burden mode 1
-46,Model output,BURDEN2,float32,"time, ncol",1249 x 1,kg/m2,Aerosol burden mode 2
-47,Model output,BURDEN3,float32,"time, ncol",1249 x 1,kg/m2,Aerosol burden mode 3
-48,Model output,BVRIM,float32,"time, lev, ncol",1249 x 80 x 1,m3/kg,Grid box averaged riming volume
-49,Model output,C10H16_SRF,float32,"time, ncol",1249 x 1,mol/mol,C10H16 in bottom layer
-50,Model output,C2H4_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H4 in bottom layer
-51,Model output,C2H5O2_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H5O2 in bottom layer
-52,Model output,C2H5OOH_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H5OOH in bottom layer
-53,Model output,C2H6_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H6 in bottom layer
-54,Model output,C3H8_SRF,float32,"time, ncol",1249 x 1,mol/mol,C3H8 in bottom layer
-55,Model output,CCN3,float32,"time, lev, ncol",1249 x 80 x 1,1/cm3,CCN concentration at S=0.1%
-56,Model output,CDNUMC,float32,"time, ncol",1249 x 1,1/m2,Vertically-integrated droplet concentration
-57,Model output,CGRAPNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud graupel sample number -ZM convection
-58,Model output,CH2O_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH2O in bottom layer
-59,Model output,CH3CHO_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3CHO in bottom layer
-60,Model output,CH3CO3_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3CO3 in bottom layer
-61,Model output,CH3COCH3_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3COCH3 in bottom layer
-62,Model output,CH3O2_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3O2 in bottom layer
-63,Model output,CH3OOH_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3OOH in bottom layer
-64,Model output,CH4LNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH4LNZ in bottom layer
-65,Model output,CICESNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud ice water sample number - ZM convection
-66,Model output,CLDHGH,float32,"time, ncol",1249 x 1,1,Vertically-integrated high cloud
-67,Model output,CLDICE,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged cloud ice amount
-68,Model output,CLDICEZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,Cloud ice water - ZM convection
-69,Model output,CLDLIQ,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged cloud liquid amount
-70,Model output,CLDLIQZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,Cloud liquid water - ZM convection
-71,Model output,CLDLOW,float32,"time, ncol",1249 x 1,1,Vertically-integrated low cloud
-72,Model output,CLDMED,float32,"time, ncol",1249 x 1,1,Vertically-integrated mid-level cloud
-73,Model output,CLDRIM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged riming amount
-74,Model output,CLDTOT,float32,"time, ncol",1249 x 1,1,Vertically-integrated total cloud
-75,Model output,CLIQSNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud liquid water sample number - ZM convection
-76,Model output,CLOUD,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Cloud fraction
-77,Model output,CLOUDFRAC_CLUBB,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud Fraction
-78,Model output,CLOUDFRAC_ICE_MICRO,float32,"time, lev, ncol",1249 x 80 x 1,unitless,Grid box ice cloud fraction in microphysics
-79,Model output,CLOUDFRAC_LIQ_MICRO,float32,"time, lev, ncol",1249 x 80 x 1,unitless,Grid box liquid cloud fraction in microphysics
-80,Model output,CLOUDFRAC_RAIN_MICRO,float32,"time, lev, ncol",1249 x 80 x 1,unitless,Grid box rain cloud fraction in microphysics
-81,Model output,CONCLD,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Convective cloud cover
-82,Model output,CO_SRF,float32,"time, ncol",1249 x 1,mol/mol,CO in bottom layer
-83,Model output,CRAINNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud rain water sample number - ZM convection
-84,Model output,CSNOWNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud snow sample number - ZM convection
-85,Model output,DCQ,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Q tendency due to moist processes
-86,Model output,DIFZM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Detrained ice water from ZM convection
-87,Model output,DLFZM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Detrained liquid water from ZM convection
-88,Model output,DMS_SRF,float32,"time, ncol",1249 x 1,mol/mol,DMS in bottom layer
-89,Model output,DNIFZM,float32,"time, lev, ncol",1249 x 80 x 1,1/kg/s,Detrained ice water num concen from ZM convection
-90,Model output,DNLFZM,float32,"time, lev, ncol",1249 x 80 x 1,1/kg/s,Detrained liquid water num concen from ZM convection
-91,Model output,DTCOND,float32,"time, lev, ncol",1249 x 80 x 1,K/s,T tendency - moist processes
-92,Model output,DTENDTH,float32,"time, ncol",1249 x 1,W/m2,Dynamic Tendency of Total (vertically integrated) moist static energy
-93,Model output,DTENDTQ,float32,"time, ncol",1249 x 1,kg/m2/s,Dynamic Tendency of Total (vertically integrated) specific humidity
-94,Model output,DTWR_C2H5OOH,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-95,Model output,DTWR_CH2O,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-96,Model output,DTWR_CH3CHO,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-97,Model output,DTWR_CH3OOH,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-98,Model output,DTWR_H2O2,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-99,Model output,DTWR_H2SO4,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-100,Model output,DTWR_HNO3,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-101,Model output,DTWR_HO2NO2,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-102,Model output,DTWR_SO2,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-103,Model output,DTWR_SOAG0,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-104,Model output,DTWR_SOAG15,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-105,Model output,DTWR_SOAG24,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-106,Model output,DTWR_SOAG31,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-107,Model output,DTWR_SOAG32,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-108,Model output,DTWR_SOAG33,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-109,Model output,DTWR_SOAG34,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-110,Model output,DTWR_SOAG35,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
-111,Model output,E90_SRF,float32,"time, ncol",1249 x 1,mol/mol,E90 in bottom layer
-112,Model output,FICE,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional ice content within cloud
-113,Model output,FLDS,float32,"time, ncol",1249 x 1,W/m2,Downwelling longwave flux at surface
-114,Model output,FLNS,float32,"time, ncol",1249 x 1,W/m2,Net longwave flux at surface
-115,Model output,FLNSC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net longwave flux at surface
-116,Model output,FLNT,float32,"time, ncol",1249 x 1,W/m2,Net longwave flux at top of model
-117,Model output,FLNTC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net longwave flux at top of model
-118,Model output,FLUT,float32,"time, ncol",1249 x 1,W/m2,Upwelling longwave flux at top of model
-119,Model output,FLUTC,float32,"time, ncol",1249 x 1,W/m2,Clearsky upwelling longwave flux at top of model
-120,Model output,FREQI,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of ice
-121,Model output,FREQL,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of liquid
-122,Model output,FREQR,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of rain
-123,Model output,FREQS,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of snow
-124,Model output,FRZZM,float32,"time, lev, ncol",1249 x 80 x 1,K/s,heating tendency due to freezing - ZM convection
-125,Model output,FSDS,float32,"time, ncol",1249 x 1,W/m2,Downwelling solar flux at surface
-126,Model output,FSDSC,float32,"time, ncol",1249 x 1,W/m2,Clearsky downwelling solar flux at surface
-127,Model output,FSNS,float32,"time, ncol",1249 x 1,W/m2,Net solar flux at surface
-128,Model output,FSNSC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net solar flux at surface
-129,Model output,FSNT,float32,"time, ncol",1249 x 1,W/m2,Net solar flux at top of model
-130,Model output,FSNTC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net solar flux at top of model
-131,Model output,FSNTOA,float32,"time, ncol",1249 x 1,W/m2,Net solar flux at top of atmosphere
-132,Model output,FSNTOAC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net solar flux at top of atmosphere
-133,Model output,FSUTOA,float32,"time, ncol",1249 x 1,W/m2,Upwelling solar flux at top of atmosphere
-134,Model output,FSUTOAC,float32,"time, ncol",1249 x 1,W/m2,Clearsky upwelling solar flux at top of atmosphere
-135,Model output,H2O2_SRF,float32,"time, ncol",1249 x 1,mol/mol,H2O2 in bottom layer
-136,Model output,H2OLNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,H2OLNZ in bottom layer
-137,Model output,H2SO4_SRF,float32,"time, ncol",1249 x 1,mol/mol,H2SO4 in bottom layer
-138,Model output,HNO3_SRF,float32,"time, ncol",1249 x 1,mol/mol,HNO3 in bottom layer
-139,Model output,HO2NO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,HO2NO2 in bottom layer
-140,Model output,HO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,HO2 in bottom layer
-141,Model output,ICEFRAC,float32,"time, ncol",1249 x 1,1,Fraction of sfc area covered by sea-ice
-142,Model output,ICIMR,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Prognostic in-cloud ice mixing ratio
-143,Model output,ICWMR,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Prognostic in-cloud water mixing ratio
-144,Model output,ISOPO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,ISOPO2 in bottom layer
-145,Model output,ISOP_SRF,float32,"time, ncol",1249 x 1,mol/mol,ISOP in bottom layer
-146,Model output,ISOP_VBS_SRF,float32,"time, ncol",1249 x 1,mol/mol,ISOP_VBS in bottom layer
-147,Model output,IWC,float32,"time, lev, ncol",1249 x 80 x 1,kg/m3,Grid box average ice water content
-148,Model output,LANDFRAC,float32,"time, ncol",1249 x 1,1,Fraction of sfc area covered by land
-149,Model output,LHFLX,float32,"time, ncol",1249 x 1,W/m2,Surface latent heat flux
-150,Model output,LINOZ_2DDO3,float32,"time, ncol",1249 x 1,DU/s,O3 2D DU tendency by linearized ozone chemistry
-151,Model output,LINOZ_2DDO3_PSC,float32,"time, ncol",1249 x 1,DU/s,O3 2D DU loss by PSCs using Carille et al. (1990)
-152,Model output,LINOZ_CH4SFCSRC,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface n2o source in LINOZ v3 with an e-fold to a fixed concentration
-153,Model output,LINOZ_N2OSFCSRC,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface n2o source in LINOZ v3 with an e-fold to a fixed concentration
-154,Model output,LINOZ_NOYSFCSINK,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface noylnz sink in LINOZ v3 with an e-fold to a fixed concentration
-155,Model output,LINOZ_O3CLIM,float32,"time, lev, ncol",1249 x 80 x 1,mol/mol,climatology of ozone in LINOZ
-156,Model output,LINOZ_O3COL,float32,"time, lev, ncol",1249 x 80 x 1,DU,ozone column above
-157,Model output,LINOZ_O3SFCSINK,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface ozone sink in LINOZ with an e-fold to a fixed concentration
-158,Model output,LINOZ_SSO3,float32,"time, lev, ncol",1249 x 80 x 1,kg,steady state O3 in LINOZ
-159,Model output,LINOZ_SZA,float32,"time, ncol",1249 x 1,degrees,solar zenith angle in LINOZ
-160,Model output,LWCF,float32,"time, ncol",1249 x 1,W/m2,Longwave cloud forcing
-161,Model output,MVKMACR_SRF,float32,"time, ncol",1249 x 1,mol/mol,MVKMACR in bottom layer
-162,Model output,MVKO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,MVKO2 in bottom layer
-163,Model output,N2O5_SRF,float32,"time, ncol",1249 x 1,mol/mol,N2O5 in bottom layer
-164,Model output,N2OLNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,N2OLNZ in bottom layer
-165,Model output,NO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,NO2 in bottom layer
-166,Model output,NO3_SRF,float32,"time, ncol",1249 x 1,mol/mol,NO3 in bottom layer
-167,Model output,NOYLNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,NOYLNZ in bottom layer
-168,Model output,NO_SRF,float32,"time, ncol",1249 x 1,mol/mol,NO in bottom layer
-169,Model output,NUMICE,float32,"time, lev, ncol",1249 x 80 x 1,1/kg,Grid box averaged cloud ice number
-170,Model output,NUMLIQ,float32,"time, lev, ncol",1249 x 80 x 1,1/kg,Grid box averaged cloud liquid number
-171,Model output,NUMRAI,float32,"time, lev, ncol",1249 x 80 x 1,1/kg,Grid box averaged rain number
-172,Model output,O3_SRF,float32,"time, ncol",1249 x 1,mol/mol,O3 in bottom layer
-173,Model output,OCNFRAC,float32,"time, ncol",1249 x 1,1,Fraction of sfc area covered by ocean
-174,Model output,OH_SRF,float32,"time, ncol",1249 x 1,mol/mol,OH in bottom layer
-175,Model output,OMEGA,float32,"time, lev, ncol",1249 x 80 x 1,Pa/s,Vertical velocity (pressure)
-176,Model output,OMEGA500,float32,"time, ncol",1249 x 1,Pa/s,Vertical velocity at 500 mbar pressure surface
-177,Model output,OMEGAT,float32,"time, lev, ncol",1249 x 80 x 1,K Pa/s,Vertical heat flux
-178,Model output,PAN_SRF,float32,"time, ncol",1249 x 1,mol/mol,PAN in bottom layer
-179,Model output,PBLH,float32,"time, ncol",1249 x 1,m,PBL height
-180,Model output,PHIS,float32,"time, ncol",1249 x 1,m2/s2,Surface geopotential
-181,Model output,PRECC,float32,"time, ncol",1249 x 1,m/s,Convective precipitation rate (liq + ice)
-182,Model output,PRECL,float32,"time, ncol",1249 x 1,m/s,Large-scale (stable) precipitation rate (liq + ice)
-183,Model output,PRECSC,float32,"time, ncol",1249 x 1,m/s,Convective snow rate (water equivalent)
-184,Model output,PRECSL,float32,"time, ncol",1249 x 1,m/s,Large-scale (stable) snow rate (water equivalent)
-185,Model output,PS,float32,"time, ncol",1249 x 1,Pa,Surface pressure
-186,Model output,PSL,float32,"time, ncol",1249 x 1,Pa,Sea level pressure
-187,Model output,Q,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Specific humidity
-188,Model output,QDIFF,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,difference from observed water
-189,Model output,QFLX,float32,"time, ncol",1249 x 1,kg/m2/s,Surface water flux
-190,Model output,QGRAPZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,graupel - ZM convection
-191,Model output,QNGZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud graupel number concen -ZM convection
-192,Model output,QNIZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud ice number concen - ZM convection
-193,Model output,QNLZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud liquid water number concen - ZM convection
-194,Model output,QNRZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud rain water number concen - ZM convection
-195,Model output,QNSZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud snow number concen - ZM convection
-196,Model output,QRAINZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,rain water - ZM convection
-197,Model output,QREFHT,float32,"time, ncol",1249 x 1,kg/kg,Reference height humidity
-198,Model output,QRL,float32,"time, lev, ncol",1249 x 80 x 1,K/s,Longwave heating rate
-199,Model output,QRS,float32,"time, lev, ncol",1249 x 80 x 1,K/s,Solar heating rate
-200,Model output,QSNOWZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,snow - ZM convection
-201,Model output,RAINQM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged rain amount
-202,Model output,RELHUM,float32,"time, lev, ncol",1249 x 80 x 1,percent,Relative humidity
-203,Model output,ROHO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,ROHO2 in bottom layer
-204,Model output,SCO,float32,"time, ncol",1249 x 1,DU,Stratospheric column ozone based on chemistry tropopause
-205,Model output,SHFLX,float32,"time, ncol",1249 x 1,W/m2,Surface sensible heat flux
-206,Model output,SNOWHICE,float32,"time, ncol",1249 x 1,m,Snow depth over ice
-207,Model output,SNOWHLND,float32,"time, ncol",1249 x 1,m,Water equivalent snow depth
-208,Model output,SO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,SO2 in bottom layer
-209,Model output,SOAG0_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG0 in bottom layer
-210,Model output,SOAG15_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG15 in bottom layer
-211,Model output,SOAG24_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG24 in bottom layer
-212,Model output,SOAG31_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG31 in bottom layer
-213,Model output,SOAG32_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG32 in bottom layer
-214,Model output,SOAG33_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG33 in bottom layer
-215,Model output,SOAG34_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG34 in bottom layer
-216,Model output,SOAG35_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG35 in bottom layer
-217,Model output,SOLIN,float32,"time, ncol",1249 x 1,W/m2,Solar insolation
-218,Model output,SWCF,float32,"time, ncol",1249 x 1,W/m2,Shortwave cloud forcing
-219,Model output,T,float32,"time, lev, ncol",1249 x 80 x 1,K,Temperature
-220,Model output,TAUGWX,float32,"time, ncol",1249 x 1,N/m2,Zonal gravity wave surface stress
-221,Model output,TAUGWY,float32,"time, ncol",1249 x 1,N/m2,Meridional gravity wave surface stress
-222,Model output,TAUX,float32,"time, ncol",1249 x 1,N/m2,Zonal surface stress
-223,Model output,TAUY,float32,"time, ncol",1249 x 1,N/m2,Meridional surface stress
-224,Model output,TCO,float32,"time, ncol",1249 x 1,DU,Tropospheric column ozone based on chemistry tropopause
-225,Model output,TDIFF,float32,"time, lev, ncol",1249 x 80 x 1,K,difference from observed temp
-226,Model output,TGCLDCWP,float32,"time, ncol",1249 x 1,kg/m2,Total grid-box cloud water path (liquid and ice)
-227,Model output,TGCLDIWP,float32,"time, ncol",1249 x 1,kg/m2,Total grid-box cloud ice water path
-228,Model output,TGCLDLWP,float32,"time, ncol",1249 x 1,kg/m2,Total grid-box cloud liquid water path
-229,Model output,TH7001000,float32,"time, ncol",1249 x 1,K,Theta difference 700 mb - 1000 mb
-230,Model output,TMQ,float32,"time, ncol",1249 x 1,kg/m2,Total (vertically integrated) precipitable water
-231,Model output,TOZLNZ,float32,"time, ncol",1249 x 1,DU,Total column Linoz ozone (O3LNZ)
-232,Model output,TREFHT,float32,"time, ncol",1249 x 1,K,Reference height temperature
-233,Model output,TROPE3D_P,float32,"time, ncol",1249 x 1,Pa,Tropopause Pressure (E90 3D)
-234,Model output,TROPE3D_T,float32,"time, ncol",1249 x 1,K,Tropopause Temperature (E90 3D)
-235,Model output,TROPMASS,float32,"time, ncol",1249 x 1,kg,tropospheric air mass of grid column
-236,Model output,TROPMASSB,float32,"time, ncol",1249 x 1,kg,tropospheric air mass of grid column (lowest tropopause)
-237,Model output,TROPMASST,float32,"time, ncol",1249 x 1,kg,tropospheric air mass of grid column (highest tropopause)
-238,Model output,TROP_P,float32,"time, ncol",1249 x 1,Pa,Tropopause Pressure
-239,Model output,TROP_T,float32,"time, ncol",1249 x 1,K,Tropopause Temperature
-240,Model output,TS,float32,"time, ncol",1249 x 1,K,Surface temperature (radiative)
-241,Model output,TSMN,float32,"time, ncol",1249 x 1,K,Minimum surface temperature over output period
-242,Model output,TSMX,float32,"time, ncol",1249 x 1,K,Maximum surface temperature over output period
-243,Model output,TUH,float32,"time, ncol",1249 x 1,W/m,Total (vertically integrated) zonal MSE flux
-244,Model output,TUQ,float32,"time, ncol",1249 x 1,kg/m/s,Total (vertically integrated) zonal water flux
-245,Model output,TVH,float32,"time, ncol",1249 x 1,W/m,Total (vertically integrated) meridional MSE flux
-246,Model output,TVQ,float32,"time, ncol",1249 x 1,kg/m/s,Total (vertically integrated) meridional water flux
-247,Model output,U,float32,"time, lev, ncol",1249 x 80 x 1,m/s,Zonal wind
-248,Model output,U10,float32,"time, ncol",1249 x 1,m/s,10m wind speed
-249,Model output,UU,float32,"time, lev, ncol",1249 x 80 x 1,m2/s2,Zonal velocity squared
-250,Model output,V,float32,"time, lev, ncol",1249 x 80 x 1,m/s,Meridional wind
-251,Model output,VQ,float32,"time, lev, ncol",1249 x 80 x 1,m/s kg/kg,Meridional water transport
-252,Model output,VT,float32,"time, lev, ncol",1249 x 80 x 1,K m/s,Meridional heat transport
-253,Model output,VU,float32,"time, lev, ncol",1249 x 80 x 1,m2/s2,Meridional flux of zonal momentum
-254,Model output,VV,float32,"time, lev, ncol",1249 x 80 x 1,m2/s2,Meridional velocity squared
-255,Model output,WD_C2H5OOH,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-256,Model output,WD_CH2O,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-257,Model output,WD_CH3CHO,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-258,Model output,WD_CH3OOH,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-259,Model output,WD_H2O2,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-260,Model output,WD_H2SO4,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-261,Model output,WD_HNO3,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-262,Model output,WD_HO2NO2,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-263,Model output,WD_SO2,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-264,Model output,WD_SOAG0,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-265,Model output,WD_SOAG15,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-266,Model output,WD_SOAG24,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-267,Model output,WD_SOAG31,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-268,Model output,WD_SOAG32,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-269,Model output,WD_SOAG33,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-270,Model output,WD_SOAG34,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-271,Model output,WD_SOAG35,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
-272,Model output,WSUB,float32,"time, lev, ncol",1249 x 80 x 1,m/s,Diagnostic sub-grid vertical velocity
-273,Model output,WUZM,float32,"time, lev, ncol",1249 x 80 x 1,m/s,vertical velocity - ZM convection
-274,Model output,Z3,float32,"time, lev, ncol",1249 x 80 x 1,m,Geopotential Height (above sea level)
-275,Model output,bc_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,bc_a1 in bottom layer
-276,Model output,bc_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,bc_a3 in bottom layer
-277,Model output,bc_a4_SRF,float32,"time, ncol",1249 x 1,kg/kg,bc_a4 in bottom layer
-278,Model output,chla,float32,"time, ncol",1249 x 1,mg L-1,ocean input data: chla
-279,Model output,diag_equiv_reflectivity,float32,"time, lev, ncol",1249 x 80 x 1,dBz,Equivalent reflectivity (rain + ice)
-280,Model output,diag_ze_ice,float32,"time, lev, ncol",1249 x 80 x 1,dBz,Equivalent reflectivity ice
-281,Model output,diag_ze_rain,float32,"time, lev, ncol",1249 x 80 x 1,dBz,Equivalent reflectivity rain
-282,Model output,dst_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,dst_a1 in bottom layer
-283,Model output,dst_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,dst_a3 in bottom layer
-284,Model output,hstobie_linoz,float32,"time, lev, ncol",1249 x 80 x 1,fraction of model time,Lowest possible Linoz level
-285,Model output,liq_ice_exchange,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to liquid phase to/from frozen phase
-286,Model output,mlip,float32,"time, ncol",1249 x 1,uM C,ocean input data: mlip
-287,Model output,mom_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a1 in bottom layer
-288,Model output,mom_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a2 in bottom layer
-289,Model output,mom_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a3 in bottom layer
-290,Model output,mom_a4_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a4 in bottom layer
-291,Model output,mpoly,float32,"time, ncol",1249 x 1,uM C,ocean input data: mpoly
-292,Model output,mprot,float32,"time, ncol",1249 x 1,uM C,ocean input data: mprot
-293,Model output,ncl_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,ncl_a1 in bottom layer
-294,Model output,ncl_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,ncl_a2 in bottom layer
-295,Model output,ncl_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,ncl_a3 in bottom layer
-296,Model output,num_a1_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a1 in bottom layer
-297,Model output,num_a2_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a2 in bottom layer
-298,Model output,num_a3_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a3 in bottom layer
-299,Model output,num_a4_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a4 in bottom layer
-300,Model output,num_a5_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a5 in bottom layer
-301,Model output,pom_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,pom_a1 in bottom layer
-302,Model output,pom_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,pom_a3 in bottom layer
-303,Model output,pom_a4_SRF,float32,"time, ncol",1249 x 1,kg/kg,pom_a4 in bottom layer
-304,Model output,so4_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a1 in bottom layer
-305,Model output,so4_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a2 in bottom layer
-306,Model output,so4_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a3 in bottom layer
-307,Model output,so4_a5_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a5 in bottom layer
-308,Model output,soa_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,soa_a1 in bottom layer
-309,Model output,soa_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,soa_a2 in bottom layer
-310,Model output,soa_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,soa_a3 in bottom layer
-311,Model output,vap_ice_exchange,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to vapor phase to/from frozen phase
-312,Model output,vap_liq_exchange,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to vapor phase to/from liquid phase
-313,Model output,vap_liq_exchange_clubb,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to vapor to liquid phase in CLUBB
+12,Model output,cosp_prs,float64,cosp_prs,7,Pa,COSP Mean ISCCP pressure
+13,Model output,cosp_prs_bnds,float64,"cosp_prs, nbnd",7 x 2,,
+14,Model output,cosp_tau,float64,cosp_tau,7,1,COSP Mean ISCCP optical depth
+15,Model output,cosp_tau_bnds,float64,"cosp_tau, nbnd",7 x 2,,
+16,Model output,cosp_scol,int32,cosp_scol,10,,COSP subcolumn
+17,Model output,cosp_ht,float64,cosp_ht,40,m,COSP Mean Height for calipso and radar simulator outputs
+18,Model output,cosp_ht_bnds,float64,"cosp_ht, nbnd",40 x 2,,
+19,Model output,cosp_temp,float64,cosp_temp,40,C,COSP Mean Temperature for calipso simulator outputs
+20,Model output,cosp_temp_bnds,float64,"cosp_temp, nbnd",40 x 2,,
+21,Model output,cosp_sr,float64,cosp_sr,15,1,COSP Mean Scattering Ratio for calipso simulator CFAD output
+22,Model output,cosp_sr_bnds,float64,"cosp_sr, nbnd",15 x 2,,
+23,Model output,cosp_sza,float64,cosp_sza,5,degrees,COSP Parasol SZA
+24,Model output,cosp_htmisr,float64,cosp_htmisr,16,m,COSP MISR height
+25,Model output,cosp_htmisr_bnds,float64,"cosp_htmisr, nbnd",16 x 2,,
+26,Model output,cosp_tau_modis,float64,cosp_tau_modis,7,1,COSP Mean MODIS optical depth
+27,Model output,cosp_tau_modis_bnds,float64,"cosp_tau_modis, nbnd",7 x 2,,
+28,Model output,cosp_reffice,float64,cosp_reffice,6,m,COSP Mean MODIS effective radius (ice)
+29,Model output,cosp_reffice_bnds,float64,"cosp_reffice, nbnd",6 x 2,,
+30,Model output,cosp_reffliq,float64,cosp_reffliq,6,m,COSP Mean MODIS effective radius (liquid)
+31,Model output,cosp_reffliq_bnds,float64,"cosp_reffliq, nbnd",6 x 2,,
+32,Model output,cosp_iwp_modis,float64,cosp_iwp_modis,7,kg/m2,COSP Mean MODIS ice water path (ice)
+33,Model output,cosp_iwp_modis_bnds,float64,"cosp_iwp_modis, nbnd",7 x 2,,
+34,Model output,cosp_lwp_modis,float64,cosp_lwp_modis,7,kg/m2,COSP Mean MODIS liquid water path (liquid)
+35,Model output,cosp_lwp_modis_bnds,float64,"cosp_lwp_modis, nbnd",7 x 2,,
+36,Model output,time,float64,time,1249,days since 1997-06-19 23:29:45,time
+37,Model output,date,int32,time,1249,,current date (YYYYMMDD)
+38,Model output,datesec,int32,time,1249,,current seconds of current date
+39,Model output,time_bnds,float64,"time, nbnd",1249 x 2,,time interval endpoints
+40,Model output,date_written,|S1,"time, chars",1249 x 8,,
+41,Model output,time_written,|S1,"time, chars",1249 x 8,,
+42,Model output,ndbase,int32,scalar,scalar,,base day
+43,Model output,nsbase,int32,scalar,scalar,,seconds of base day
+44,Model output,nbdate,int32,scalar,scalar,,base date (YYYYMMDD)
+45,Model output,nbsec,int32,scalar,scalar,,seconds of base date
+46,Model output,mdt,int32,scalar,scalar,s,timestep
+47,Model output,ndcur,int32,time,1249,,current day (from base day)
+48,Model output,nscur,int32,time,1249,,current seconds of current day
+49,Model output,co2vmr,float64,time,1249,,co2 volume mixing ratio
+50,Model output,ch4vmr,float64,time,1249,,ch4 volume mixing ratio
+51,Model output,n2ovmr,float64,time,1249,,n2o volume mixing ratio
+52,Model output,f11vmr,float64,time,1249,,f11 volume mixing ratio
+53,Model output,f12vmr,float64,time,1249,,f12 volume mixing ratio
+54,Model output,sol_tsi,float64,time,1249,W/m2,total solar irradiance
+55,Model output,nsteph,int32,time,1249,,current timestep
+56,Model output,AEROD_v,float32,"time, ncol",1249 x 1,1,Total Aerosol Optical Depth in visible band
+57,Model output,ANRAIN,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average rain number conc
+58,Model output,ANSNOW,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average snow number conc
+59,Model output,AODALL,float32,"time, ncol",1249 x 1,,AOD 550 nm for all time and species
+60,Model output,AODDUST1,float32,"time, ncol",1249 x 1,,Aerosol optical depth 550 nm model 1 from dust
+61,Model output,AODDUST3,float32,"time, ncol",1249 x 1,,Aerosol optical depth 550 nm model 3 from dust
+62,Model output,AODVIS,float32,"time, ncol",1249 x 1,,Aerosol optical depth 550 nm
+63,Model output,AQRAIN,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Average rain mixing ratio
+64,Model output,AQSNOW,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Average snow mixing ratio
+65,Model output,AREI,float32,"time, lev, ncol",1249 x 80 x 1,Micron,Average ice effective radius
+66,Model output,AREL,float32,"time, lev, ncol",1249 x 80 x 1,Micron,Average droplet effective radius
+67,Model output,AWNC,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average cloud water number conc
+68,Model output,AWNI,float32,"time, lev, ncol",1249 x 80 x 1,m-3,Average cloud ice number conc
+69,Model output,BURDEN1,float32,"time, ncol",1249 x 1,kg/m2,Aerosol burden mode 1
+70,Model output,BURDEN2,float32,"time, ncol",1249 x 1,kg/m2,Aerosol burden mode 2
+71,Model output,BURDEN3,float32,"time, ncol",1249 x 1,kg/m2,Aerosol burden mode 3
+72,Model output,BVRIM,float32,"time, lev, ncol",1249 x 80 x 1,m3/kg,Grid box averaged riming volume
+73,Model output,C10H16_SRF,float32,"time, ncol",1249 x 1,mol/mol,C10H16 in bottom layer
+74,Model output,C2H4_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H4 in bottom layer
+75,Model output,C2H5O2_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H5O2 in bottom layer
+76,Model output,C2H5OOH_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H5OOH in bottom layer
+77,Model output,C2H6_SRF,float32,"time, ncol",1249 x 1,mol/mol,C2H6 in bottom layer
+78,Model output,C3H8_SRF,float32,"time, ncol",1249 x 1,mol/mol,C3H8 in bottom layer
+79,Model output,CCN3,float32,"time, lev, ncol",1249 x 80 x 1,1/cm3,CCN concentration at S=0.1%
+80,Model output,CDNUMC,float32,"time, ncol",1249 x 1,1/m2,Vertically-integrated droplet concentration
+81,Model output,CFAD_SR532_CAL,float32,"time, cosp_ht, cosp_sr, ncol",1249 x 40 x 15 x 1,1,Calipso Scattering Ratio CFAD (532 nm)
+82,Model output,CGRAPNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud graupel sample number -ZM convection
+83,Model output,CH2O_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH2O in bottom layer
+84,Model output,CH3CHO_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3CHO in bottom layer
+85,Model output,CH3CO3_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3CO3 in bottom layer
+86,Model output,CH3COCH3_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3COCH3 in bottom layer
+87,Model output,CH3O2_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3O2 in bottom layer
+88,Model output,CH3OOH_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH3OOH in bottom layer
+89,Model output,CH4LNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,CH4LNZ in bottom layer
+90,Model output,CICESNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud ice water sample number - ZM convection
+91,Model output,CLDHGH,float32,"time, ncol",1249 x 1,1,Vertically-integrated high cloud
+92,Model output,CLDHGH_CAL,float32,"time, ncol",1249 x 1,percent,Calipso High-level Cloud Fraction
+93,Model output,CLDHGH_CAL_ICE,float32,"time, ncol",1249 x 1,percent,Calipso High-level Ice Cloud Fraction
+94,Model output,CLDHGH_CAL_LIQ,float32,"time, ncol",1249 x 1,percent,Calipso High-level Liquid Cloud Fraction
+95,Model output,CLDHGH_CAL_UN,float32,"time, ncol",1249 x 1,percent,Calipso High-level Undefined-Phase Cloud Fraction
+96,Model output,CLDICE,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged cloud ice amount
+97,Model output,CLDICEZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,Cloud ice water - ZM convection
+98,Model output,CLDLIQ,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged cloud liquid amount
+99,Model output,CLDLIQZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,Cloud liquid water - ZM convection
+100,Model output,CLDLOW,float32,"time, ncol",1249 x 1,1,Vertically-integrated low cloud
+101,Model output,CLDLOW_CAL,float32,"time, ncol",1249 x 1,percent,Calipso Low-level Cloud Fraction
+102,Model output,CLDLOW_CAL_ICE,float32,"time, ncol",1249 x 1,percent,Calipso Low-level Ice Cloud Fraction
+103,Model output,CLDLOW_CAL_LIQ,float32,"time, ncol",1249 x 1,percent,Calipso Low-level Liquid Cloud Fraction
+104,Model output,CLDLOW_CAL_UN,float32,"time, ncol",1249 x 1,percent,Calipso Low-level Undefined-Phase Cloud Fraction
+105,Model output,CLDMED,float32,"time, ncol",1249 x 1,1,Vertically-integrated mid-level cloud
+106,Model output,CLDMED_CAL,float32,"time, ncol",1249 x 1,percent,Calipso Mid-level Cloud Fraction
+107,Model output,CLDMED_CAL_ICE,float32,"time, ncol",1249 x 1,percent,Calipso Mid-level Ice Cloud Fraction
+108,Model output,CLDMED_CAL_LIQ,float32,"time, ncol",1249 x 1,percent,Calipso Mid-level Liquid Cloud Fraction
+109,Model output,CLDMED_CAL_UN,float32,"time, ncol",1249 x 1,percent,Calipso Mid-level Undefined-Phase Cloud Fraction
+110,Model output,CLDRIM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged riming amount
+111,Model output,CLDTOT,float32,"time, ncol",1249 x 1,1,Vertically-integrated total cloud
+112,Model output,CLDTOT_CAL,float32,"time, ncol",1249 x 1,percent,Calipso Total Cloud Fraction
+113,Model output,CLDTOT_CAL_ICE,float32,"time, ncol",1249 x 1,percent,Calipso Total Ice Cloud Fraction
+114,Model output,CLDTOT_CAL_LIQ,float32,"time, ncol",1249 x 1,percent,Calipso Total Liquid Cloud Fraction
+115,Model output,CLDTOT_CAL_UN,float32,"time, ncol",1249 x 1,percent,Calipso Total Undefined-Phase Cloud Fraction
+116,Model output,CLDTOT_ISCCP,float32,"time, ncol",1249 x 1,percent,Total Cloud Fraction Calculated by the ISCCP Simulator
+117,Model output,CLD_CAL,float32,"time, cosp_ht, ncol",1249 x 40 x 1,percent,Calipso Cloud Fraction (532 nm)
+118,Model output,CLD_CAL_ICE,float32,"time, cosp_ht, ncol",1249 x 40 x 1,percent,Calipso Ice Cloud Fraction
+119,Model output,CLD_CAL_LIQ,float32,"time, cosp_ht, ncol",1249 x 40 x 1,percent,Calipso Liquid Cloud Fraction
+120,Model output,CLD_CAL_UN,float32,"time, cosp_ht, ncol",1249 x 40 x 1,percent,Calipso Undefined-Phase Cloud Fraction
+121,Model output,CLD_MISR,float32,"time, cosp_htmisr, cosp_tau, ncol",1249 x 16 x 7 x 1,percent,Cloud Fraction from MISR Simulator
+122,Model output,CLHMODIS,float32,"time, ncol",1249 x 1,%,MODIS High Level Cloud Fraction
+123,Model output,CLIMODIS,float32,"time, ncol",1249 x 1,%,MODIS Ice Cloud Fraction
+124,Model output,CLIMODISIC,float32,"time, ncol",1249 x 1,%,In-cloud MODIS Ice Cloud Fraction
+125,Model output,CLIQSNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud liquid water sample number - ZM convection
+126,Model output,CLLMODIS,float32,"time, ncol",1249 x 1,%,MODIS Low Level Cloud Fraction
+127,Model output,CLMMODIS,float32,"time, ncol",1249 x 1,%,MODIS Mid Level Cloud Fraction
+128,Model output,CLMODIS,float32,"time, cosp_prs, cosp_tau_modis, ncol",1249 x 7 x 7 x 1,%,MODIS Cloud Area Fraction
+129,Model output,CLOUD,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Cloud fraction
+130,Model output,CLOUDFRAC_CLUBB,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud Fraction
+131,Model output,CLOUDFRAC_ICE_MICRO,float32,"time, lev, ncol",1249 x 80 x 1,unitless,Grid box ice cloud fraction in microphysics
+132,Model output,CLOUDFRAC_LIQ_MICRO,float32,"time, lev, ncol",1249 x 80 x 1,unitless,Grid box liquid cloud fraction in microphysics
+133,Model output,CLOUDFRAC_RAIN_MICRO,float32,"time, lev, ncol",1249 x 80 x 1,unitless,Grid box rain cloud fraction in microphysics
+134,Model output,CLRIMODIS,float32,"time, cosp_reffice, cosp_tau_modis, ncol",1249 x 6 x 7 x 1,%,MODIS Cloud-Fraction Joint Histogram of Cloud Optical Thickness vs Cloud Particle Size for Ice-topped Clouds
+135,Model output,CLRLMODIS,float32,"time, cosp_reffliq, cosp_tau_modis, ncol",1249 x 6 x 7 x 1,%,MODIS Cloud-Fraction Joint Histogram of Cloud Optical Thickness vs Cloud Particle Size for Liquid-topped Clouds
+136,Model output,CLTMODIS,float32,"time, ncol",1249 x 1,%,MODIS Total Cloud Fraction
+137,Model output,CLTMODISIC,float32,"time, ncol",1249 x 1,%,In-cloud MODIS Total Cloud Fraction
+138,Model output,CLWMODIS,float32,"time, ncol",1249 x 1,%,MODIS Liquid Cloud Fraction
+139,Model output,CLWMODISIC,float32,"time, ncol",1249 x 1,%,In-cloud MODIS Liquid Cloud Fraction
+140,Model output,CONCLD,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Convective cloud cover
+141,Model output,CO_SRF,float32,"time, ncol",1249 x 1,mol/mol,CO in bottom layer
+142,Model output,CRAINNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud rain water sample number - ZM convection
+143,Model output,CSNOWNUM,float32,"time, lev, ncol",1249 x 80 x 1,1,Cloud snow sample number - ZM convection
+144,Model output,DCQ,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Q tendency due to moist processes
+145,Model output,DIFZM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Detrained ice water from ZM convection
+146,Model output,DLFZM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Detrained liquid water from ZM convection
+147,Model output,DMS_SRF,float32,"time, ncol",1249 x 1,mol/mol,DMS in bottom layer
+148,Model output,DNIFZM,float32,"time, lev, ncol",1249 x 80 x 1,1/kg/s,Detrained ice water num concen from ZM convection
+149,Model output,DNLFZM,float32,"time, lev, ncol",1249 x 80 x 1,1/kg/s,Detrained liquid water num concen from ZM convection
+150,Model output,DTCOND,float32,"time, lev, ncol",1249 x 80 x 1,K/s,T tendency - moist processes
+151,Model output,DTENDTH,float32,"time, ncol",1249 x 1,W/m2,Dynamic Tendency of Total (vertically integrated) moist static energy
+152,Model output,DTENDTQ,float32,"time, ncol",1249 x 1,kg/m2/s,Dynamic Tendency of Total (vertically integrated) specific humidity
+153,Model output,DTWR_C2H5OOH,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+154,Model output,DTWR_CH2O,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+155,Model output,DTWR_CH3CHO,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+156,Model output,DTWR_CH3OOH,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+157,Model output,DTWR_H2O2,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+158,Model output,DTWR_H2SO4,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+159,Model output,DTWR_HNO3,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+160,Model output,DTWR_HO2NO2,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+161,Model output,DTWR_SO2,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+162,Model output,DTWR_SOAG0,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+163,Model output,DTWR_SOAG15,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+164,Model output,DTWR_SOAG24,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+165,Model output,DTWR_SOAG31,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+166,Model output,DTWR_SOAG32,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+167,Model output,DTWR_SOAG33,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+168,Model output,DTWR_SOAG34,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+169,Model output,DTWR_SOAG35,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,wet removal Neu scheme tendency
+170,Model output,E90_SRF,float32,"time, ncol",1249 x 1,mol/mol,E90 in bottom layer
+171,Model output,FICE,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional ice content within cloud
+172,Model output,FISCCP1_COSP,float32,"time, cosp_prs, cosp_tau, ncol",1249 x 7 x 7 x 1,percent,Grid-box fraction covered by each ISCCP D level cloud type
+173,Model output,FLDS,float32,"time, ncol",1249 x 1,W/m2,Downwelling longwave flux at surface
+174,Model output,FLNS,float32,"time, ncol",1249 x 1,W/m2,Net longwave flux at surface
+175,Model output,FLNSC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net longwave flux at surface
+176,Model output,FLNT,float32,"time, ncol",1249 x 1,W/m2,Net longwave flux at top of model
+177,Model output,FLNTC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net longwave flux at top of model
+178,Model output,FLUT,float32,"time, ncol",1249 x 1,W/m2,Upwelling longwave flux at top of model
+179,Model output,FLUTC,float32,"time, ncol",1249 x 1,W/m2,Clearsky upwelling longwave flux at top of model
+180,Model output,FREQI,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of ice
+181,Model output,FREQL,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of liquid
+182,Model output,FREQR,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of rain
+183,Model output,FREQS,float32,"time, lev, ncol",1249 x 80 x 1,fraction,Fractional occurrence of snow
+184,Model output,FRZZM,float32,"time, lev, ncol",1249 x 80 x 1,K/s,heating tendency due to freezing - ZM convection
+185,Model output,FSDS,float32,"time, ncol",1249 x 1,W/m2,Downwelling solar flux at surface
+186,Model output,FSDSC,float32,"time, ncol",1249 x 1,W/m2,Clearsky downwelling solar flux at surface
+187,Model output,FSNS,float32,"time, ncol",1249 x 1,W/m2,Net solar flux at surface
+188,Model output,FSNSC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net solar flux at surface
+189,Model output,FSNT,float32,"time, ncol",1249 x 1,W/m2,Net solar flux at top of model
+190,Model output,FSNTC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net solar flux at top of model
+191,Model output,FSNTOA,float32,"time, ncol",1249 x 1,W/m2,Net solar flux at top of atmosphere
+192,Model output,FSNTOAC,float32,"time, ncol",1249 x 1,W/m2,Clearsky net solar flux at top of atmosphere
+193,Model output,FSUTOA,float32,"time, ncol",1249 x 1,W/m2,Upwelling solar flux at top of atmosphere
+194,Model output,FSUTOAC,float32,"time, ncol",1249 x 1,W/m2,Clearsky upwelling solar flux at top of atmosphere
+195,Model output,H2O2_SRF,float32,"time, ncol",1249 x 1,mol/mol,H2O2 in bottom layer
+196,Model output,H2OLNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,H2OLNZ in bottom layer
+197,Model output,H2SO4_SRF,float32,"time, ncol",1249 x 1,mol/mol,H2SO4 in bottom layer
+198,Model output,HNO3_SRF,float32,"time, ncol",1249 x 1,mol/mol,HNO3 in bottom layer
+199,Model output,HO2NO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,HO2NO2 in bottom layer
+200,Model output,HO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,HO2 in bottom layer
+201,Model output,ICEFRAC,float32,"time, ncol",1249 x 1,1,Fraction of sfc area covered by sea-ice
+202,Model output,ICIMR,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Prognostic in-cloud ice mixing ratio
+203,Model output,ICWMR,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Prognostic in-cloud water mixing ratio
+204,Model output,ISOPO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,ISOPO2 in bottom layer
+205,Model output,ISOP_SRF,float32,"time, ncol",1249 x 1,mol/mol,ISOP in bottom layer
+206,Model output,ISOP_VBS_SRF,float32,"time, ncol",1249 x 1,mol/mol,ISOP_VBS in bottom layer
+207,Model output,IWC,float32,"time, lev, ncol",1249 x 80 x 1,kg/m3,Grid box average ice water content
+208,Model output,IWPMODIS,float32,"time, ncol",1249 x 1,kg m-2,MODIS Cloud Ice Water Path*CLIMODIS
+209,Model output,IWPRIMODIS,float32,"time, cosp_reffice, cosp_iwp_modis, ncol",1249 x 6 x 7 x 1,%,MODIS Cloud-Fraction Joint Histogram of Cloud Water Path vs Cloud Particle Size for Ice-topped Clouds
+210,Model output,LANDFRAC,float32,"time, ncol",1249 x 1,1,Fraction of sfc area covered by land
+211,Model output,LHFLX,float32,"time, ncol",1249 x 1,W/m2,Surface latent heat flux
+212,Model output,LINOZ_2DDO3,float32,"time, ncol",1249 x 1,DU/s,O3 2D DU tendency by linearized ozone chemistry
+213,Model output,LINOZ_2DDO3_PSC,float32,"time, ncol",1249 x 1,DU/s,O3 2D DU loss by PSCs using Carille et al. (1990)
+214,Model output,LINOZ_CH4SFCSRC,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface n2o source in LINOZ v3 with an e-fold to a fixed concentration
+215,Model output,LINOZ_N2OSFCSRC,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface n2o source in LINOZ v3 with an e-fold to a fixed concentration
+216,Model output,LINOZ_NOYSFCSINK,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface noylnz sink in LINOZ v3 with an e-fold to a fixed concentration
+217,Model output,LINOZ_O3CLIM,float32,"time, lev, ncol",1249 x 80 x 1,mol/mol,climatology of ozone in LINOZ
+218,Model output,LINOZ_O3COL,float32,"time, lev, ncol",1249 x 80 x 1,DU,ozone column above
+219,Model output,LINOZ_O3SFCSINK,float32,"time, ncol",1249 x 1,Tg/yr/m2,surface ozone sink in LINOZ with an e-fold to a fixed concentration
+220,Model output,LINOZ_SSO3,float32,"time, lev, ncol",1249 x 80 x 1,kg,steady state O3 in LINOZ
+221,Model output,LINOZ_SZA,float32,"time, ncol",1249 x 1,degrees,solar zenith angle in LINOZ
+222,Model output,LWCF,float32,"time, ncol",1249 x 1,W/m2,Longwave cloud forcing
+223,Model output,LWPMODIS,float32,"time, ncol",1249 x 1,kg m-2,MODIS Cloud Liquid Water Path*CLWMODIS
+224,Model output,LWPRLMODIS,float32,"time, cosp_reffliq, cosp_lwp_modis, ncol",1249 x 6 x 7 x 1,%,MODIS Cloud-Fraction Joint Histogram of Cloud Water Path vs Cloud Particle Size for Liquid-topped Clouds
+225,Model output,MEANCLDALB_ISCCP,float32,"time, ncol",1249 x 1,1,Mean cloud albedo*CLDTOT_ISCCP
+226,Model output,MEANPTOP_ISCCP,float32,"time, ncol",1249 x 1,Pa,Mean cloud top pressure*CLDTOT_ISCCP
+227,Model output,MEANTAU_ISCCP,float32,"time, ncol",1249 x 1,1,Mean optical thickness*CLDTOT_ISCCP
+228,Model output,MEANTBCLR_ISCCP,float32,"time, ncol",1249 x 1,K,Mean Clear-sky Infrared Tb from ISCCP simulator
+229,Model output,MEANTB_ISCCP,float32,"time, ncol",1249 x 1,K,Mean Infrared Tb from ISCCP simulator
+230,Model output,MVKMACR_SRF,float32,"time, ncol",1249 x 1,mol/mol,MVKMACR in bottom layer
+231,Model output,MVKO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,MVKO2 in bottom layer
+232,Model output,N2O5_SRF,float32,"time, ncol",1249 x 1,mol/mol,N2O5 in bottom layer
+233,Model output,N2OLNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,N2OLNZ in bottom layer
+234,Model output,NO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,NO2 in bottom layer
+235,Model output,NO3_SRF,float32,"time, ncol",1249 x 1,mol/mol,NO3 in bottom layer
+236,Model output,NOYLNZ_SRF,float32,"time, ncol",1249 x 1,mol/mol,NOYLNZ in bottom layer
+237,Model output,NO_SRF,float32,"time, ncol",1249 x 1,mol/mol,NO in bottom layer
+238,Model output,NUMICE,float32,"time, lev, ncol",1249 x 80 x 1,1/kg,Grid box averaged cloud ice number
+239,Model output,NUMLIQ,float32,"time, lev, ncol",1249 x 80 x 1,1/kg,Grid box averaged cloud liquid number
+240,Model output,NUMRAI,float32,"time, lev, ncol",1249 x 80 x 1,1/kg,Grid box averaged rain number
+241,Model output,O3_SRF,float32,"time, ncol",1249 x 1,mol/mol,O3 in bottom layer
+242,Model output,OCNFRAC,float32,"time, ncol",1249 x 1,1,Fraction of sfc area covered by ocean
+243,Model output,OH_SRF,float32,"time, ncol",1249 x 1,mol/mol,OH in bottom layer
+244,Model output,OMEGA,float32,"time, lev, ncol",1249 x 80 x 1,Pa/s,Vertical velocity (pressure)
+245,Model output,OMEGA500,float32,"time, ncol",1249 x 1,Pa/s,Vertical velocity at 500 mbar pressure surface
+246,Model output,OMEGAT,float32,"time, lev, ncol",1249 x 80 x 1,K Pa/s,Vertical heat flux
+247,Model output,PAN_SRF,float32,"time, ncol",1249 x 1,mol/mol,PAN in bottom layer
+248,Model output,PBLH,float32,"time, ncol",1249 x 1,m,PBL height
+249,Model output,PCTMODIS,float32,"time, ncol",1249 x 1,Pa,MODIS Cloud Top Pressure*CLTMODIS
+250,Model output,PHIS,float32,"time, ncol",1249 x 1,m2/s2,Surface geopotential
+251,Model output,PRECC,float32,"time, ncol",1249 x 1,m/s,Convective precipitation rate (liq + ice)
+252,Model output,PRECL,float32,"time, ncol",1249 x 1,m/s,Large-scale (stable) precipitation rate (liq + ice)
+253,Model output,PRECSC,float32,"time, ncol",1249 x 1,m/s,Convective snow rate (water equivalent)
+254,Model output,PRECSL,float32,"time, ncol",1249 x 1,m/s,Large-scale (stable) snow rate (water equivalent)
+255,Model output,PRECT,float32,"time, ncol",1249 x 1,m/s,Total (convective and large-scale) precipitation rate (liq + ice)
+256,Model output,PS,float32,"time, ncol",1249 x 1,Pa,Surface pressure
+257,Model output,PSL,float32,"time, ncol",1249 x 1,Pa,Sea level pressure
+258,Model output,Q,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Specific humidity
+259,Model output,QDIFF,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,difference from observed water
+260,Model output,QFLX,float32,"time, ncol",1249 x 1,kg/m2/s,Surface water flux
+261,Model output,QGRAPZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,graupel - ZM convection
+262,Model output,QNGZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud graupel number concen -ZM convection
+263,Model output,QNIZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud ice number concen - ZM convection
+264,Model output,QNLZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud liquid water number concen - ZM convection
+265,Model output,QNRZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud rain water number concen - ZM convection
+266,Model output,QNSZM,float32,"time, lev, ncol",1249 x 80 x 1,1/m3,Cloud snow number concen - ZM convection
+267,Model output,QRAINZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,rain water - ZM convection
+268,Model output,QREFHT,float32,"time, ncol",1249 x 1,kg/kg,Reference height humidity
+269,Model output,QRL,float32,"time, lev, ncol",1249 x 80 x 1,K/s,Longwave heating rate
+270,Model output,QRS,float32,"time, lev, ncol",1249 x 80 x 1,K/s,Solar heating rate
+271,Model output,QSNOWZM,float32,"time, lev, ncol",1249 x 80 x 1,g/m3,snow - ZM convection
+272,Model output,RAINQM,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg,Grid box averaged rain amount
+273,Model output,REFFCLIMODIS,float32,"time, ncol",1249 x 1,m,MODIS Ice Cloud Particle Size*CLIMODIS
+274,Model output,REFFCLWMODIS,float32,"time, ncol",1249 x 1,m,MODIS Liquid Cloud Particle Size*CLWMODIS
+275,Model output,RELHUM,float32,"time, lev, ncol",1249 x 80 x 1,percent,Relative humidity
+276,Model output,RFL_PARASOL,float32,"time, cosp_sza, ncol",1249 x 5 x 1,1,PARASOL-like mono-directional reflectance
+277,Model output,ROHO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,ROHO2 in bottom layer
+278,Model output,SCO,float32,"time, ncol",1249 x 1,DU,Stratospheric column ozone based on chemistry tropopause
+279,Model output,SHFLX,float32,"time, ncol",1249 x 1,W/m2,Surface sensible heat flux
+280,Model output,SNOWHICE,float32,"time, ncol",1249 x 1,m,Snow depth over ice
+281,Model output,SNOWHLND,float32,"time, ncol",1249 x 1,m,Water equivalent snow depth
+282,Model output,SO2_SRF,float32,"time, ncol",1249 x 1,mol/mol,SO2 in bottom layer
+283,Model output,SOAG0_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG0 in bottom layer
+284,Model output,SOAG15_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG15 in bottom layer
+285,Model output,SOAG24_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG24 in bottom layer
+286,Model output,SOAG31_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG31 in bottom layer
+287,Model output,SOAG32_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG32 in bottom layer
+288,Model output,SOAG33_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG33 in bottom layer
+289,Model output,SOAG34_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG34 in bottom layer
+290,Model output,SOAG35_SRF,float32,"time, ncol",1249 x 1,mol/mol,SOAG35 in bottom layer
+291,Model output,SOLIN,float32,"time, ncol",1249 x 1,W/m2,Solar insolation
+292,Model output,SWCF,float32,"time, ncol",1249 x 1,W/m2,Shortwave cloud forcing
+293,Model output,T,float32,"time, lev, ncol",1249 x 80 x 1,K,Temperature
+294,Model output,TAUGWX,float32,"time, ncol",1249 x 1,N/m2,Zonal gravity wave surface stress
+295,Model output,TAUGWY,float32,"time, ncol",1249 x 1,N/m2,Meridional gravity wave surface stress
+296,Model output,TAUILOGMODIS,float32,"time, ncol",1249 x 1,1,MODIS Ice Cloud Optical Thickness (Log10 Mean)*CLIMODIS
+297,Model output,TAUIMODIS,float32,"time, ncol",1249 x 1,1,MODIS Ice Cloud Optical Thickness*CLIMODIS
+298,Model output,TAUTLOGMODIS,float32,"time, ncol",1249 x 1,1,MODIS Total Cloud Optical Thickness (Log10 Mean)*CLTMODIS
+299,Model output,TAUTMODIS,float32,"time, ncol",1249 x 1,1,MODIS Total Cloud Optical Thickness*CLTMODIS
+300,Model output,TAUWLOGMODIS,float32,"time, ncol",1249 x 1,1,MODIS Liquid Cloud Optical Thickness (Log10 Mean)*CLWMODIS
+301,Model output,TAUWMODIS,float32,"time, ncol",1249 x 1,1,MODIS Liquid Cloud Optical Thickness*CLWMODIS
+302,Model output,TAUX,float32,"time, ncol",1249 x 1,N/m2,Zonal surface stress
+303,Model output,TAUY,float32,"time, ncol",1249 x 1,N/m2,Meridional surface stress
+304,Model output,TCO,float32,"time, ncol",1249 x 1,DU,Tropospheric column ozone based on chemistry tropopause
+305,Model output,TDIFF,float32,"time, lev, ncol",1249 x 80 x 1,K,difference from observed temp
+306,Model output,TGCLDCWP,float32,"time, ncol",1249 x 1,kg/m2,Total grid-box cloud water path (liquid and ice)
+307,Model output,TGCLDIWP,float32,"time, ncol",1249 x 1,kg/m2,Total grid-box cloud ice water path
+308,Model output,TGCLDLWP,float32,"time, ncol",1249 x 1,kg/m2,Total grid-box cloud liquid water path
+309,Model output,TH7001000,float32,"time, ncol",1249 x 1,K,Theta difference 700 mb - 1000 mb
+310,Model output,TMQ,float32,"time, ncol",1249 x 1,kg/m2,Total (vertically integrated) precipitable water
+311,Model output,TOZLNZ,float32,"time, ncol",1249 x 1,DU,Total column Linoz ozone (O3LNZ)
+312,Model output,TREFHT,float32,"time, ncol",1249 x 1,K,Reference height temperature
+313,Model output,TROPE3D_P,float32,"time, ncol",1249 x 1,Pa,Tropopause Pressure (E90 3D)
+314,Model output,TROPE3D_T,float32,"time, ncol",1249 x 1,K,Tropopause Temperature (E90 3D)
+315,Model output,TROPMASS,float32,"time, ncol",1249 x 1,kg,tropospheric air mass of grid column
+316,Model output,TROPMASSB,float32,"time, ncol",1249 x 1,kg,tropospheric air mass of grid column (lowest tropopause)
+317,Model output,TROPMASST,float32,"time, ncol",1249 x 1,kg,tropospheric air mass of grid column (highest tropopause)
+318,Model output,TROP_P,float32,"time, ncol",1249 x 1,Pa,Tropopause Pressure
+319,Model output,TROP_T,float32,"time, ncol",1249 x 1,K,Tropopause Temperature
+320,Model output,TS,float32,"time, ncol",1249 x 1,K,Surface temperature (radiative)
+321,Model output,TSMN,float32,"time, ncol",1249 x 1,K,Minimum surface temperature over output period
+322,Model output,TSMX,float32,"time, ncol",1249 x 1,K,Maximum surface temperature over output period
+323,Model output,TUH,float32,"time, ncol",1249 x 1,W/m,Total (vertically integrated) zonal MSE flux
+324,Model output,TUQ,float32,"time, ncol",1249 x 1,kg/m/s,Total (vertically integrated) zonal water flux
+325,Model output,TVH,float32,"time, ncol",1249 x 1,W/m,Total (vertically integrated) meridional MSE flux
+326,Model output,TVQ,float32,"time, ncol",1249 x 1,kg/m/s,Total (vertically integrated) meridional water flux
+327,Model output,U,float32,"time, lev, ncol",1249 x 80 x 1,m/s,Zonal wind
+328,Model output,U10,float32,"time, ncol",1249 x 1,m/s,10m wind speed
+329,Model output,UU,float32,"time, lev, ncol",1249 x 80 x 1,m2/s2,Zonal velocity squared
+330,Model output,V,float32,"time, lev, ncol",1249 x 80 x 1,m/s,Meridional wind
+331,Model output,VQ,float32,"time, lev, ncol",1249 x 80 x 1,m/s kg/kg,Meridional water transport
+332,Model output,VT,float32,"time, lev, ncol",1249 x 80 x 1,K m/s,Meridional heat transport
+333,Model output,VU,float32,"time, lev, ncol",1249 x 80 x 1,m2/s2,Meridional flux of zonal momentum
+334,Model output,VV,float32,"time, lev, ncol",1249 x 80 x 1,m2/s2,Meridional velocity squared
+335,Model output,WD_C2H5OOH,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+336,Model output,WD_CH2O,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+337,Model output,WD_CH3CHO,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+338,Model output,WD_CH3OOH,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+339,Model output,WD_H2O2,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+340,Model output,WD_H2SO4,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+341,Model output,WD_HNO3,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+342,Model output,WD_HO2NO2,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+343,Model output,WD_SO2,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+344,Model output,WD_SOAG0,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+345,Model output,WD_SOAG15,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+346,Model output,WD_SOAG24,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+347,Model output,WD_SOAG31,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+348,Model output,WD_SOAG32,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+349,Model output,WD_SOAG33,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+350,Model output,WD_SOAG34,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+351,Model output,WD_SOAG35,float32,"time, ncol",1249 x 1,kg/m2/s,vertical integrated wet deposition flux
+352,Model output,WSUB,float32,"time, lev, ncol",1249 x 80 x 1,m/s,Diagnostic sub-grid vertical velocity
+353,Model output,WUZM,float32,"time, lev, ncol",1249 x 80 x 1,m/s,vertical velocity - ZM convection
+354,Model output,Z3,float32,"time, lev, ncol",1249 x 80 x 1,m,Geopotential Height (above sea level)
+355,Model output,bc_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,bc_a1 in bottom layer
+356,Model output,bc_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,bc_a3 in bottom layer
+357,Model output,bc_a4_SRF,float32,"time, ncol",1249 x 1,kg/kg,bc_a4 in bottom layer
+358,Model output,chla,float32,"time, ncol",1249 x 1,mg L-1,ocean input data: chla
+359,Model output,diag_equiv_reflectivity,float32,"time, lev, ncol",1249 x 80 x 1,dBz,Equivalent reflectivity (rain + ice)
+360,Model output,diag_ze_ice,float32,"time, lev, ncol",1249 x 80 x 1,dBz,Equivalent reflectivity ice
+361,Model output,diag_ze_rain,float32,"time, lev, ncol",1249 x 80 x 1,dBz,Equivalent reflectivity rain
+362,Model output,dst_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,dst_a1 in bottom layer
+363,Model output,dst_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,dst_a3 in bottom layer
+364,Model output,hstobie_linoz,float32,"time, lev, ncol",1249 x 80 x 1,fraction of model time,Lowest possible Linoz level
+365,Model output,liq_ice_exchange,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to liquid phase to/from frozen phase
+366,Model output,mlip,float32,"time, ncol",1249 x 1,uM C,ocean input data: mlip
+367,Model output,mom_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a1 in bottom layer
+368,Model output,mom_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a2 in bottom layer
+369,Model output,mom_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a3 in bottom layer
+370,Model output,mom_a4_SRF,float32,"time, ncol",1249 x 1,kg/kg,mom_a4 in bottom layer
+371,Model output,mpoly,float32,"time, ncol",1249 x 1,uM C,ocean input data: mpoly
+372,Model output,mprot,float32,"time, ncol",1249 x 1,uM C,ocean input data: mprot
+373,Model output,ncl_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,ncl_a1 in bottom layer
+374,Model output,ncl_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,ncl_a2 in bottom layer
+375,Model output,ncl_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,ncl_a3 in bottom layer
+376,Model output,num_a1_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a1 in bottom layer
+377,Model output,num_a2_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a2 in bottom layer
+378,Model output,num_a3_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a3 in bottom layer
+379,Model output,num_a4_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a4 in bottom layer
+380,Model output,num_a5_SRF,float32,"time, ncol",1249 x 1, 1/kg,num_a5 in bottom layer
+381,Model output,pom_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,pom_a1 in bottom layer
+382,Model output,pom_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,pom_a3 in bottom layer
+383,Model output,pom_a4_SRF,float32,"time, ncol",1249 x 1,kg/kg,pom_a4 in bottom layer
+384,Model output,so4_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a1 in bottom layer
+385,Model output,so4_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a2 in bottom layer
+386,Model output,so4_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a3 in bottom layer
+387,Model output,so4_a5_SRF,float32,"time, ncol",1249 x 1,kg/kg,so4_a5 in bottom layer
+388,Model output,soa_a1_SRF,float32,"time, ncol",1249 x 1,kg/kg,soa_a1 in bottom layer
+389,Model output,soa_a2_SRF,float32,"time, ncol",1249 x 1,kg/kg,soa_a2 in bottom layer
+390,Model output,soa_a3_SRF,float32,"time, ncol",1249 x 1,kg/kg,soa_a3 in bottom layer
+391,Model output,vap_ice_exchange,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to vapor phase to/from frozen phase
+392,Model output,vap_liq_exchange,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to vapor phase to/from liquid phase
+393,Model output,vap_liq_exchange_clubb,float32,"time, lev, ncol",1249 x 80 x 1,kg/kg/s,Tendency for conversion from/to vapor to liquid phase in CLUBB

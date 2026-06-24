@@ -1,22 +1,6 @@
 # SCM-UQ Workflow
 
-Workflow tools for ARM97 E3SM single-column model uncertainty quantification
-experiments. This repository contains the code, templates, configuration, and
-documentation needed to regenerate designs, render E3SM case scripts, launch
-runs, postprocess outputs, run QC, and build figures.
-
-It intentionally does not include generated model output, downloaded NetCDF
-history files, E3SM source code, or machine-local inputdata.
-
-## Workflow Stages
-
-1. `01-design-generation/` - QMC, OAT, ARM97, and segmented experiment design tools.
-2. `02-case-generation/` - tools that render E3SM case scripts and manifests.
-3. `03-run-control/` - local Mac and NERSC run orchestration helpers.
-4. `04-postprocess-qc/` - stitching, metrics extraction, QC, and sensitivity analysis tools.
-5. `05-comparison-visualization/` - comparison and plotting scripts.
-6. `templates/` - notes about E3SM template scripts used by generators.
-7. `manifests/` - machine-readable tool inventory.
+Workflow tools for ARM97 E3SM single-column model uncertainty quantification experiments. This repository contains the code, templates, configuration, and documentation needed to regenerate designs, render E3SM case scripts, launch runs, postprocess outputs, run QC, and build figures.
 
 ## Install
 
@@ -33,15 +17,17 @@ conda env create -f environment.yml
 conda activate scm-uq-workflow
 ```
 
+
 ## Configure
 
 Copy the environment example and set paths for your machine:
 
 ```sh
-cp examples/env.example .env
+cp configs/env.example .env
 source .env
 ```
 
+<!-- 
 Important variables:
 
 - `SCM_RUNS` - directory containing E3SM SCM case directories.
@@ -62,204 +48,236 @@ NERSC reusable ARM97 baseline is:
 
 ```sh
 export TEMPLATE_EXE_NERSC="/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe"
-```
-
-## Run
-
-Run commands from this repository root:
-
-```sh
-python3 scripts/workflows/generate_arm97_experiment.py --help
-python3 scripts/workflows/generate_qmc64_segmented_scripts.py --help
-./scripts/workflows/run_arm97_experiment_segments_parallel.zsh
-```
-
-The workflow scripts compute the repository root from their own location, but
-running from the root keeps relative output paths and logs predictable.
+``` -->
 
 ## Workflow Diagram
+
+This diagram is the canonical workflow for the rebuild. The reusable compiled
+model path is optional and can be added later without changing the main stages.
+See `docs/ARM97_WORKFLOW_GUIDE.md` for the detailed file-by-file workflow guide.
 
 ```mermaid
 flowchart TD
   A["Choose parameters and sampling strategy"] --> B["Generate experiment design"]
-  B --> C["Render platform-specific case scripts"]
-  C --> D["Run segmented SCM cases"]
-  D --> E["Collect segment history outputs"]
-  E --> F["Stitch segments into complete cases"]
-  F --> G["Extract metrics and response tables"]
-  G --> H["Compare, visualize, and interpret results"]
+  B --> C["Render scripts"]
+  S["Choose the platform"] --> C
+  T["Stitched setting"] --> C
+  C --> D["Run SCM cases"]
+  D --> F["Post processing"]
+  F --> H["Compare, visualize, and interpret results"]
 
   R["Reusable compiled model"] --> D
 ```
 
-## Demo: 70-Sample Mac Reuse-Build Run
+## Minimal Demo: Run ARM97 Baseline Script
 
-This demo is the end-to-end Mac workflow used for a 14-parameter,
-70-sample ARM97 experiment. It reuses a pre-built Mac `e3sm.exe`, runs the
-segmented cases, and stitches each sample into one complete 26-day output file.
-It uses:
+This is the smallest useful run for validating the local E3SM/SCM setup before
+generating UQ designs. It runs the ARM97 baseline case directly from the
+baseline C-shell script.
 
-- 14 PPE tuning parameters from `examples/params_arm97_14.yaml`.
-- QMC sampling with `QMCPy DigitalNetB2`.
-- Fixed seed `20260602`.
-- Stitched mode with 52 overlapping segments per sample.
-
-The parameter YAML maps PPE paper names to E3SM namelist names used by the
-templates, for example `dp1 -> cldfrc_dp1`, `dmpdz -> zmconv_dmpdz`,
-`gamma_coef -> clubb_gamma_coef`, and `c6rt -> clubb_C6rt`.
-
-Generate the experiment scripts:
+1. Configure local paths:
 
 ```sh
-python3 scripts/workflows/generate_arm97_experiment.py \
-  --platform mac \
-  --experiment arm97_qmc14x5_stitched_seed20260602 \
-  --design digitalnetb2 \
-  --n-samples 70 \
-  --seed 20260602 \
-  --params examples/params_arm97_14.yaml \
-  --segment-mode 52x1.5day \
-  --out-root arm97_experiments_0602 \
-  --case-prefix mac_ARM97_qmc14x5 \
-  --overwrite
+cp configs/env.example .env
+source .env
 ```
 
-Run the 70 samples with a reused executable:
+At this stage, only these variables are required:
 
 ```sh
 export SCM_RUNS="/Users/yunlong/projects/e3sm/SCM_runs"
 export E3SM_CODE_DIR="/Users/yunlong/projects/e3sm/E3SM"
 export SCM_UQ_EXTRA_PATH="/Users/yunlong/local/gcc11/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/anaconda3/bin"
-
-MANIFEST="arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/arm97_qmc14x5_stitched_seed20260602_script_manifest.csv" \
-STATUS="arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/experiment_run_status_all70.csv" \
-MAX_JOBS=10 \
-./scripts/workflows/run_arm97_experiment_segments_parallel.zsh
 ```
 
-The run creates `70 * 52 = 3640` segment cases. If a segment already has a
-history file, the runner records it as `skipped_existing_success` and continues,
-so interrupted or partial runs can be resumed with the same `STATUS` file.
+2. Make the ARM97 IOP file available to E3SM inputdata.
 
-Stitch the 52 segments for each sample into one 26-day file and extract summary
-metrics:
+The baseline script expects the forcing file name:
+
+```text
+ARM97_iopfile_4scam.nc
+```
+
+The file should be available under the E3SM inputdata SCM IOP directory used by
+the case:
+
+```text
+atm/cam/scam/iop/ARM97_iopfile_4scam.nc
+```
+
+3. Run the baseline script from the repository root:
 
 ```sh
-python3 scripts/workflows/postprocess_arm97_experiment.py \
-  --experiment-dir arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac \
-  --manifest arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/arm97_qmc14x5_stitched_seed20260602_script_manifest.csv \
-  --samples arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/arm97_qmc14x5_stitched_seed20260602_samples.csv \
-  --status arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/design/experiment_run_status_all70.csv \
+./scripts_baseline/scm_ARM97_baseline.csh
+```
+
+The script creates, configures, builds, and runs this case:
+
+```text
+$SCM_RUNS/scm_ARM97_baseline
+```
+
+Internally it calls the standard CIME steps:
+
+```text
+create_newcase
+case.setup
+case.build
+case.submit --no-batch
+```
+
+4. Check for the baseline history output:
+
+```sh
+ls "$SCM_RUNS/scm_ARM97_baseline/run"/*.eam.h0.*.nc
+```
+
+5. Post-process the model and observation files into ready-to-visualize NetCDF
+   files.
+
+This step keeps post-processing outside Python plotting code. It copies the
+model history file into `outputs/` and slices the ARM97 IOP observation file to
+the model comparison window.
+
+```sh
+mkdir -p outputs
+
+MODEL_HISTORY="$(ls -t "$SCM_RUNS/scm_ARM97_baseline/run"/*.eam.h0.*.nc | head -n 1)"
+NCKS="${NCKS:-ncks}"
+
+"$NCKS" -O "$MODEL_HISTORY" outputs/arm97_baseline_model_ready.nc
+"$NCKS" -O -d time,72,1944 \
+  scripts_baseline/ARM97_iopfile_4scam.nc \
+  outputs/arm97_iop_observation_model_window_nco.nc
+```
+
+Expected post-processed files:
+
+```text
+outputs/arm97_baseline_model_ready.nc
+outputs/arm97_iop_observation_model_window_nco.nc
+```
+
+If `ncks` is not on `PATH`, install NCO first or point `NCKS` to the local NCO
+binary:
+
+```sh
+export NCKS="/private/tmp/scm-uq-nco/bin/ncks"
+```
+
+6. Visualize the baseline against the IOP observation.
+
+Open the comparison notebook:
+
+```sh
+jupyter notebook notebooks/ARM97_baseline_vs_observation.ipynb
+```
+
+In the first code cell, make sure the model and observation inputs point to the
+post-processed files:
+
+```python
+MODEL_FILE = ROOT / "outputs/arm97_baseline_model_ready.nc"
+OBSERVATION = ROOT / "outputs/arm97_iop_observation_model_window_nco.nc"
+```
+
+Then run all cells. The notebook produces interactive figures and static output
+files under `notebook_outputs/`.
+
+## Demo 2: Run ARM97 Baseline with Stitched Setting
+
+This demo uses the workflow generator instead of the hand-written baseline
+script. It creates one baseline sample, renders segmented ARM97 scripts, runs
+the segment cases, and stitches the kept windows into one ready-to-analyze
+26-day NetCDF file.
+
+1. Configure local paths:
+
+```sh
+source .env
+```
+
+2. Generate the stitched baseline experiment:
+
+```sh
+python3 src/workflows/generate_arm97_experiment.py \
+  --platform mac \
+  --experiment arm97_baseline_stitched_demo \
+  --design baseline \
+  --params configs/params_arm97_core.yaml \
+  --segment-mode 52x1.5day \
+  --out-root arm97_experiments \
+  --case-prefix mac_ARM97_baseline_stitched \
+  --overwrite
+```
+
+The generated files are written under:
+
+```text
+arm97_experiments/arm97_baseline_stitched_demo/mac/
+```
+
+Key files:
+
+```text
+design/arm97_baseline_stitched_demo_samples.csv
+design/arm97_baseline_stitched_demo_script_manifest.csv
+scripts/*.csh
+```
+
+3. Run the generated segment scripts:
+
+```sh
+MANIFEST="arm97_experiments/arm97_baseline_stitched_demo/mac/design/arm97_baseline_stitched_demo_script_manifest.csv" \
+STATUS="arm97_experiments/arm97_baseline_stitched_demo/mac/design/experiment_run_status.csv" \
+MAX_JOBS=10 \
+./src/workflows/run_arm97_experiment_segments_parallel.zsh
+```
+
+`MAX_JOBS` controls how many segment cases are submitted in parallel. Reduce it
+if the machine runs out of memory or compiler/runtime resources.
+
+4. Stitch the segment outputs and extract summary metrics:
+
+```sh
+python3 src/workflows/postprocess_arm97_experiment.py \
+  --experiment-dir arm97_experiments/arm97_baseline_stitched_demo/mac \
+  --manifest arm97_experiments/arm97_baseline_stitched_demo/mac/design/arm97_baseline_stitched_demo_script_manifest.csv \
+  --samples arm97_experiments/arm97_baseline_stitched_demo/mac/design/arm97_baseline_stitched_demo_samples.csv \
+  --status arm97_experiments/arm97_baseline_stitched_demo/mac/design/experiment_run_status.csv \
   --scm-runs "$SCM_RUNS"
 ```
 
-Expected successful outputs:
+Expected stitched output:
 
 ```text
-arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/stitched/*.nc
-arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/metrics/arm97_qmc14x5_stitched_seed20260602_mac_metrics.csv
-arm97_experiments_0602/arm97_qmc14x5_stitched_seed20260602/mac/metrics/arm97_qmc14x5_stitched_seed20260602_mac_parameter_response.csv
+arm97_experiments/arm97_baseline_stitched_demo/mac/stitched/mac_ARM97_baseline_stitched_000_stitched_26day.nc
 ```
 
-The completed demo produced:
+Expected metrics outputs:
 
 ```text
-segment records: 3640 total; 3588 success; 52 skipped_existing_success; 0 failed
-stitched files: 70
-time records per stitched file: 1249
-stitched time range: 1997-06-19 23:29:45 to 1997-07-15 23:29:45
+arm97_experiments/arm97_baseline_stitched_demo/mac/metrics/
 ```
 
-In stitched mode, each segment runs for 36 hours. The first 24 hours are
-discarded as spinup, and the final 12-hour window is kept. With half-hourly
-history output and duplicate boundary times removed, 52 kept windows produce a
-complete 26-day sample.
-
-## NERSC Small-Batch Test Before Full Run
-
-Before running the full 70-sample experiment on NERSC, generate a small test
-with the same 14-parameter design, sampler, seed, and stitched segment mode.
-This example uses 2 samples, so it creates `2 * 52 = 104` segment cases.
-
-Generate the NERSC smoke-test scripts:
+5. Check the generated products:
 
 ```sh
-python3 scripts/workflows/generate_arm97_experiment.py \
-  --platform nersc \
-  --experiment arm97_qmc14x5_nersc_smoke2_seed20260602 \
-  --design digitalnetb2 \
-  --n-samples 2 \
-  --seed 20260602 \
-  --params examples/params_arm97_14.yaml \
-  --segment-mode 52x1.5day \
-  --out-root nersc_experiments_0602 \
-  --case-prefix nersc_ARM97_qmc14x5_smoke
+ls -lh arm97_experiments/arm97_baseline_stitched_demo/mac/stitched/*.nc
+sed -n '1,5p' arm97_experiments/arm97_baseline_stitched_demo/mac/metrics/*_metrics.csv
 ```
 
-The generated NERSC run directory is:
+Notes:
 
-```text
-nersc_experiments_0602/arm97_qmc14x5_nersc_smoke2_seed20260602/nersc/
-```
-
-On NERSC, from that generated directory, set machine-specific paths:
-
-```sh
-export SCM_RUNS="${PSCRATCH}/SCM_runs"
-export E3SM_CODE_DIR="/path/to/E3SM"
-export TEMPLATE_EXE_NERSC="/pscratch/sd/y/yunlong/SCM_runs/nersc_ARM97_reusable_baseline/build/e3sm.exe"
-```
-
-Set up the E3SM cases:
-
-```sh
-MAX_SETUP_JOBS=8 ./setup_cases_nersc.sh
-```
-
-Submit the smoke-test bundle:
-
-```sh
-sbatch --export=ALL,MAX_CONCURRENT=104 run_bundle_nersc.sh
-```
-
-After the smoke test succeeds, generate the full 70-sample NERSC batch:
-
-```sh
-python3 scripts/workflows/generate_arm97_experiment.py \
-  --platform nersc \
-  --experiment arm97_qmc14x5_nersc_seed20260602 \
-  --design digitalnetb2 \
-  --n-samples 70 \
-  --seed 20260602 \
-  --params examples/params_arm97_14.yaml \
-  --segment-mode 52x1.5day \
-  --out-root nersc_experiments_0602 \
-  --case-prefix nersc_ARM97_qmc14x5
-```
-
-Then run the full batch from:
-
-```text
-nersc_experiments_0602/arm97_qmc14x5_nersc_seed20260602/nersc/
-```
-
-For the full run, start with:
-
-```sh
-MAX_SETUP_JOBS=8 ./setup_cases_nersc.sh
-sbatch --export=ALL,MAX_CONCURRENT=120 run_bundle_nersc.sh
-```
-
-The generated `run_bundle_nersc.sh` uses one CPU node, `regular` QOS, and a
-4-hour walltime by default. Edit the `#SBATCH --account`, `#SBATCH --time`, and
-`MAX_CONCURRENT` settings if your NERSC project or queue behavior requires it.
-
-## Quick Links
-
-- Full tool inventory: `manifests/tools.csv`
-- One-page command reference: `00-overview/COMMANDS.md`
-- Workflow scripts: `scripts/workflows/`
-- GitHub release checklist: `docs/GITHUB_RELEASE_CHECKLIST.md`
+- `--segment-mode 52x1.5day` is the stitched setting exposed by the current
+  generator. In the current implementation it renders overlapping 36-hour
+  segment runs, discards the first 12 hours of each segment, and keeps the next
+  24 hours for stitching.
+- Post processing is required for stitched experiments because the model output
+  is first produced as separate segment history files.
+- If a previous run already created case directories with the same
+  `--case-prefix`, choose a new prefix or clean those old case directories
+  deliberately before rerunning.
 
 ## License
 
