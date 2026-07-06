@@ -8,7 +8,7 @@ configs/
 scripts_baseline/
 src/workflows/
 notebooks/
-outputs/
+cases/
 ```
 
 ## 0. Environment And Local Paths
@@ -227,16 +227,17 @@ Notes:
 
 Files:
 
-- `scripts_baseline/scm_ARM97_baseline.csh`
 - `scripts_baseline/run_e3sm_scm_ARM97.csh`
 - `scripts_baseline/run_e3sm_scm_ARM97_prect_cosp.csh`
+- `cases/run_e3sm_scm_ARM97/run_e3sm_scm_ARM97.csh`
 - `src/workflows/run_arm97_experiment_segments_parallel.zsh`
 
 Minimal single-case command:
 
 ```sh
 source .env
-./scripts_baseline/run_e3sm_scm_ARM97_prect_cosp.csh
+CASE_DIR="cases/run_e3sm_scm_ARM97"
+./"$CASE_DIR/run_e3sm_scm_ARM97.csh"
 ```
 
 Segmented batch command:
@@ -287,7 +288,7 @@ Notes:
 Files:
 
 - `src/workflows/postprocess_arm97_experiment.py`
-- `outputs/arm97_prect_cosp_nco_postprocess_manifest.md`
+- `cases/run_e3sm_scm_ARM97/`
 
 For stitched experiments:
 
@@ -297,8 +298,19 @@ python3 src/workflows/postprocess_arm97_experiment.py \
   --manifest <experiment>/<platform>/design/<experiment>_script_manifest.csv \
   --samples <experiment>/<platform>/design/<experiment>_samples.csv \
   --status <experiment>/<platform>/design/experiment_run_status.csv \
-  --scm-runs "$SCM_RUNS"
+  --scm-runs "$SCM_RUNS" \
+  --stitch-backend nco
 ```
+
+Recommended backend:
+
+- `--stitch-backend nco`: use NCO `ncks` to slice each segment by computed
+  `time` indices and `ncrcat` to concatenate along the record dimension.
+- `--stitch-backend python`: legacy fallback that copies NetCDF records with
+  Python.
+
+If NCO is not on `PATH`, set `NCKS` and `NCRCAT`, or pass
+`--ncks /path/to/ncks --ncrcat /path/to/ncrcat`.
 
 Outputs:
 
@@ -313,20 +325,28 @@ For professor-recommended NCO time-window post-processing:
 Files generated in this repository:
 
 ```text
-outputs/arm97_prect_cosp_model_ready.nc
-outputs/arm97_iop_observation_model_window_nco.nc
+cases/run_e3sm_scm_ARM97/arm97_model_ready.nc
+cases/run_e3sm_scm_ARM97/arm97_iop_observation_model_window_nco.nc
 ```
 
 Commands used:
 
 ```sh
-/private/tmp/scm-uq-nco/bin/ncks -O "$MODEL" outputs/arm97_prect_cosp_model_ready.nc
-/private/tmp/scm-uq-nco/bin/ncks -O -d time,72,1944 "$OBS" outputs/arm97_iop_observation_model_window_nco.nc
+CASE_DIR="cases/run_e3sm_scm_ARM97"
+MODEL="$(ls -t "$SCM_RUNS/e3sm_scm_ARM97/run"/*.eam.h0.*.nc | head -n 1)"
+OBS="scripts_baseline/ARM97_iopfile_4scam.nc"
+NCKS="${NCKS:-ncks}"
+
+"$NCKS" -O "$MODEL" "$CASE_DIR/arm97_model_ready.nc"
+"$NCKS" -O -d time,72,1944 "$OBS" "$CASE_DIR/arm97_iop_observation_model_window_nco.nc"
 ```
 
 Notes:
 
 - NCO preserves NetCDF dimensions, record variables, and metadata better than ad hoc array concatenation.
+- For stitched experiments, Python still reads the manifest and finds the exact
+  keep-window indices, but NCO performs the actual time-dimension slicing and
+  concatenation.
 - The current observation slice is selected by absolute overlap with the model run using `bdate + tsec`.
 - Model time range: `1997-06-19 23:29:45` to `1997-07-15 23:29:45`.
 - Observation slice range: `1997-06-19 23:29:45.937500` to `1997-07-15 23:29:46`.
@@ -357,8 +377,8 @@ Notes:
 
 Files:
 
-- `notebooks/ARM97_prect_cosp_vs_observation.ipynb`
-- `notebooks/ARM97_baseline_vs_observation.ipynb`
+- `cases/run_e3sm_scm_ARM97/ARM97_model_output_vs_observation_all_variables.ipynb`
+- `notebooks/ARM97_model_output_vs_observation_all_variables.ipynb`
 - `notebooks/observed_variable_pairs.csv`
 - `notebooks/model_output_variables.csv`
 - `notebooks/iop_observation_variables.csv`
@@ -366,21 +386,21 @@ Files:
 Current recommended notebook:
 
 ```text
-notebooks/ARM97_prect_cosp_vs_observation.ipynb
+cases/run_e3sm_scm_ARM97/ARM97_model_output_vs_observation_all_variables.ipynb
 ```
 
 Current notebook inputs:
 
 ```text
-outputs/arm97_prect_cosp_model_ready.nc
-outputs/arm97_iop_observation_model_window_nco.nc
+cases/run_e3sm_scm_ARM97/arm97_model_ready.nc
+cases/run_e3sm_scm_ARM97/arm97_iop_observation_model_window_nco.nc
 ```
 
 Static notebook outputs:
 
 ```text
-notebook_outputs/arm97_prect_cosp_vs_observation/prect_cosp_vs_observation_surface_summary.csv
-notebook_outputs/arm97_prect_cosp_vs_observation/figures/*.png
+cases/run_e3sm_scm_ARM97/notebook_outputs/arm97_model_output_vs_observation_all_variables/*.csv
+cases/run_e3sm_scm_ARM97/notebook_outputs/arm97_model_output_vs_observation_all_variables/*.pdf
 ```
 
 Time-alignment rule:
@@ -425,15 +445,13 @@ Notes:
 Check a model output file:
 
 ```sh
-ncdump -h outputs/arm97_prect_cosp_model_ready.nc | sed -n '1,80p'
+ncdump -h cases/run_e3sm_scm_ARM97/arm97_model_ready.nc | sed -n '1,80p'
 ```
 
-Check observation time range by inspecting the NCO post-processing manifest and
-the NetCDF headers:
+Check observation time range by inspecting the NetCDF header:
 
 ```sh
-sed -n '1,120p' outputs/arm97_prect_cosp_nco_postprocess_manifest.md
-ncdump -h outputs/arm97_iop_observation_model_window_nco.nc | sed -n '1,80p'
+ncdump -h cases/run_e3sm_scm_ARM97/arm97_iop_observation_model_window_nco.nc | sed -n '1,80p'
 ```
 
 Check run status:

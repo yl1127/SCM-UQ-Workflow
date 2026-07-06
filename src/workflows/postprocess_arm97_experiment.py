@@ -5,6 +5,8 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 import os
+import shutil
+import subprocess
 from typing import Any
 
 import numpy as np
@@ -52,6 +54,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scm-runs", default=os.environ.get("SCM_RUNS", "/path/to/SCM_runs"))
     parser.add_argument("--stitched-dir", help="Output directory for stitched NetCDF files.")
     parser.add_argument("--metrics-dir", help="Output directory for metrics CSVs.")
+    parser.add_argument(
+        "--stitch-backend",
+        choices=["python", "nco"],
+        default="python",
+        help="Use Python NetCDF copying or NCO ncks/ncrcat for segment stitching.",
+    )
+    parser.add_argument("--ncks", default=os.environ.get("NCKS"), help="Path to ncks. Defaults to PATH lookup.")
+    parser.add_argument("--ncrcat", default=os.environ.get("NCRCAT"), help="Path to ncrcat. Defaults to PATH lookup.")
+    parser.add_argument(
+        "--keep-nco-temp",
+        action="store_true",
+        help="Keep temporary NCO segment files under stitched/_nco_segments.",
+    )
     parser.add_argument(
         "--allow-missing-status",
         action="store_true",
@@ -198,6 +213,91 @@ def stitch_sample(scm_runs: Path, stitched_dir: Path, sample_case: str, sample_m
     return out_path
 
 
+def resolve_executable(name: str, explicit_path: str | None) -> str:
+    if explicit_path:
+        path = Path(explicit_path)
+        if path.exists():
+            return str(path)
+        raise SystemExit(f"{name} not found: {explicit_path}")
+    resolved = shutil.which(name)
+    if resolved:
+        return resolved
+    raise SystemExit(f"{name} not found on PATH. Set --{name} or ${name.upper()}.")
+
+
+def run_command(command: list[str]) -> None:
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as exc:
+        joined = " ".join(command)
+        raise SystemExit(f"command failed with exit code {exc.returncode}: {joined}") from exc
+
+
+def consecutive_range(indices: list[int], case_name: str) -> tuple[int, int]:
+    start = indices[0]
+    end = indices[-1]
+    expected = list(range(start, end + 1))
+    if indices != expected:
+        raise RuntimeError(
+            f"NCO backend requires consecutive time records for {case_name}; got {indices[:5]}...{indices[-5:]}"
+        )
+    return start, end
+
+
+def stitch_sample_nco(
+    scm_runs: Path,
+    stitched_dir: Path,
+    sample_case: str,
+    sample_manifest: pd.DataFrame,
+    *,
+    ncks: str,
+    ncrcat: str,
+    keep_temp: bool,
+) -> Path:
+    out_path = stitched_dir / f"{sample_case}_stitched_26day.nc"
+    selected = selected_records_for_sample(scm_runs, sample_manifest)
+    temp_dir = stitched_dir / "_nco_segments" / sample_case
+    if temp_dir.exists():
+        shutil.rmtree(temp_dir)
+    temp_dir.mkdir(parents=True)
+
+    segment_files: list[Path] = []
+    for segment_number, (case_name, history_path, indices) in enumerate(selected):
+        start, end = consecutive_range(indices, case_name)
+        segment_path = temp_dir / f"{segment_number:03d}_{case_name}_keep.nc"
+        run_command(
+            [
+                ncks,
+                "-O",
+                "--mk_rec_dmn",
+                "time",
+                "-d",
+                f"time,{start},{end}",
+                str(history_path),
+                str(segment_path),
+            ]
+        )
+        segment_files.append(segment_path)
+
+    if out_path.exists():
+        out_path.unlink()
+    run_command([ncrcat, "-O", *[str(path) for path in segment_files], str(out_path)])
+
+    with Dataset(out_path, "a") as out:
+        out.setncattr("sample_case", sample_case)
+        out.setncattr(
+            "segment_stitching",
+            "NCO ncks/ncrcat; 26 daily 36h segment runs; first 12h discarded; "
+            "final 24h kept from each segment; duplicate boundary times removed",
+        )
+
+    if not keep_temp:
+        shutil.rmtree(temp_dir)
+        if not any(temp_dir.parent.iterdir()):
+            temp_dir.parent.rmdir()
+    return out_path
+
+
 def as_float_array(ds: Dataset, var_name: str) -> np.ma.MaskedArray:
     return np.ma.masked_invalid(np.ma.asarray(ds.variables[var_name][:], dtype=float))
 
@@ -279,11 +379,29 @@ def main() -> None:
     samples = pd.read_csv(samples_path)
     validate_status(status_path, manifest, args.allow_missing_status)
 
+    ncks = ncrcat = None
+    if args.stitch_backend == "nco":
+        ncks = resolve_executable("ncks", args.ncks)
+        ncrcat = resolve_executable("ncrcat", args.ncrcat)
+
     metrics_rows = []
     for sample_index in sorted(manifest["sample_index"].unique()):
         sample_manifest = manifest[manifest["sample_index"] == sample_index]
         sample_case = str(sample_manifest["sample_case"].iloc[0])
-        out_path = stitch_sample(scm_runs, stitched_dir, sample_case, sample_manifest)
+        if args.stitch_backend == "nco":
+            assert ncks is not None
+            assert ncrcat is not None
+            out_path = stitch_sample_nco(
+                scm_runs,
+                stitched_dir,
+                sample_case,
+                sample_manifest,
+                ncks=ncks,
+                ncrcat=ncrcat,
+                keep_temp=args.keep_nco_temp,
+            )
+        else:
+            out_path = stitch_sample(scm_runs, stitched_dir, sample_case, sample_manifest)
         metrics_rows.append(extract_metrics(int(sample_index), sample_case, out_path))
         print(f"stitched sample {int(sample_index):03d}: {out_path}")
 

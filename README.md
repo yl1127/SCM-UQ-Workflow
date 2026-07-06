@@ -69,11 +69,11 @@ flowchart TD
   R["Reusable compiled model"] --> D
 ```
 
-## Minimal Demo: Run ARM97 Baseline Script
+## Minimal Demo: Run ARM97 Script
 
 This is the smallest useful run for validating the local E3SM/SCM setup before
-generating UQ designs. It runs the ARM97 baseline case directly from the
-baseline C-shell script.
+generating UQ designs. It runs one ARM97 case directly from the case C-shell
+script and keeps the demo artifacts under one `cases/` directory.
 
 1. Configure local paths:
 
@@ -105,16 +105,18 @@ the case:
 atm/cam/scam/iop/ARM97_iopfile_4scam.nc
 ```
 
-3. Run the baseline script from the repository root:
+3. Choose the local demo case folder and run the case script from the repository
+   root:
 
 ```sh
-./scripts_baseline/scm_ARM97_baseline.csh
+CASE_DIR="cases/run_e3sm_scm_ARM97"
+./"$CASE_DIR/run_e3sm_scm_ARM97.csh"
 ```
 
 The script creates, configures, builds, and runs this case:
 
 ```text
-$SCM_RUNS/scm_ARM97_baseline
+$SCM_RUNS/e3sm_scm_ARM97
 ```
 
 Internally it calls the standard CIME steps:
@@ -126,36 +128,37 @@ case.build
 case.submit --no-batch
 ```
 
-4. Check for the baseline history output:
+4. Check for the model history output:
 
 ```sh
-ls "$SCM_RUNS/scm_ARM97_baseline/run"/*.eam.h0.*.nc
+ls "$SCM_RUNS/e3sm_scm_ARM97/run"/*.eam.h0.*.nc
 ```
 
 5. Post-process the model and observation files into ready-to-visualize NetCDF
    files.
 
 This step keeps post-processing outside Python plotting code. It copies the
-model history file into `outputs/` and slices the ARM97 IOP observation file to
-the model comparison window.
+model history file into the demo case folder and slices the ARM97 IOP
+observation file to the model comparison window.
 
 ```sh
-mkdir -p outputs
+CASE_DIR="cases/run_e3sm_scm_ARM97"
+mkdir -p "$CASE_DIR"
 
-MODEL_HISTORY="$(ls -t "$SCM_RUNS/scm_ARM97_baseline/run"/*.eam.h0.*.nc | head -n 1)"
+MODEL_HISTORY="$(ls -t "$SCM_RUNS/e3sm_scm_ARM97/run"/*.eam.h0.*.nc | head -n 1)"
 NCKS="${NCKS:-ncks}"
 
-"$NCKS" -O "$MODEL_HISTORY" outputs/arm97_baseline_model_ready.nc
+"$NCKS" -O "$MODEL_HISTORY" "$CASE_DIR/arm97_model_ready.nc"
 "$NCKS" -O -d time,72,1944 \
   scripts_baseline/ARM97_iopfile_4scam.nc \
-  outputs/arm97_iop_observation_model_window_nco.nc
+  "$CASE_DIR/arm97_iop_observation_model_window_nco.nc"
 ```
 
 Expected post-processed files:
 
 ```text
-outputs/arm97_baseline_model_ready.nc
-outputs/arm97_iop_observation_model_window_nco.nc
+cases/run_e3sm_scm_ARM97/arm97_model_ready.nc
+cases/run_e3sm_scm_ARM97/arm97_iop_observation_model_window_nco.nc
 ```
 
 If `ncks` is not on `PATH`, install NCO first or point `NCKS` to the local NCO
@@ -167,22 +170,23 @@ export NCKS="/private/tmp/scm-uq-nco/bin/ncks"
 
 6. Visualize the baseline against the IOP observation.
 
-Open the comparison notebook:
+Open the comparison notebook stored with the case artifacts:
 
 ```sh
-jupyter notebook notebooks/ARM97_baseline_vs_observation.ipynb
+jupyter notebook cases/run_e3sm_scm_ARM97/ARM97_model_output_vs_observation_all_variables.ipynb
 ```
 
 In the first code cell, make sure the model and observation inputs point to the
-post-processed files:
+case-local post-processed files:
 
 ```python
-MODEL_FILE = ROOT / "outputs/arm97_baseline_model_ready.nc"
-OBSERVATION = ROOT / "outputs/arm97_iop_observation_model_window_nco.nc"
+CASE_DIR = ROOT / "cases/run_e3sm_scm_ARM97"
+MODEL_FILE = CASE_DIR / "arm97_model_ready.nc"
+OBSERVATION_FILE = CASE_DIR / "arm97_iop_observation_model_window_nco.nc"
 ```
 
 Then run all cells. The notebook produces interactive figures and static output
-files under `notebook_outputs/`.
+files under `cases/run_e3sm_scm_ARM97/notebook_outputs/`.
 
 ## Demo 2: Run ARM97 Baseline with Stitched Setting
 
@@ -245,8 +249,13 @@ python3 src/workflows/postprocess_arm97_experiment.py \
   --manifest arm97_experiments/arm97_baseline_stitched_demo/mac/design/arm97_baseline_stitched_demo_script_manifest.csv \
   --samples arm97_experiments/arm97_baseline_stitched_demo/mac/design/arm97_baseline_stitched_demo_samples.csv \
   --status arm97_experiments/arm97_baseline_stitched_demo/mac/design/experiment_run_status.csv \
-  --scm-runs "$SCM_RUNS"
+  --scm-runs "$SCM_RUNS" \
+  --stitch-backend nco
 ```
+
+The NCO backend uses `ncks` to slice each segment by `time` index and `ncrcat`
+to concatenate along the record dimension. If these tools are not on `PATH`,
+set `NCKS` and `NCRCAT`, or pass `--ncks /path/to/ncks --ncrcat /path/to/ncrcat`.
 
 Expected stitched output:
 

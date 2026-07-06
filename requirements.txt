@@ -1,9 +1,15 @@
 matplotlib
 netCDF4
+notebook
 numpy
 pandas
+plotly
 PyYAML
 qmcpy
+reportlab
 scipy
 scikit-learn
 xarray
+ipykernel
+ipywidgets
+jupyter

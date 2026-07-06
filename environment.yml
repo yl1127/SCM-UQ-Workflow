@@ -3,11 +3,18 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.10
+  - ipykernel
+  - ipywidgets
+  - jupyter
   - matplotlib
+  - nco
   - netcdf4
+  - notebook
   - numpy
   - pandas
+  - plotly
   - pyyaml
+  - reportlab
   - scipy
   - scikit-learn
   - xarray

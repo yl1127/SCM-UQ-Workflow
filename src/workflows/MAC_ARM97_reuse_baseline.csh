@@ -42,10 +42,10 @@
   # Options include:
   #  1) cons_droplet (sets cloud liquid and ice concentration
   #                   to a constant)
-  #  2) prescribed (uses climatologically prescribed aerosol 
+  #  2) prescribed (uses climatologically prescribed aerosol
   #                 concentration)
-  # setenv init_aero_type prescribed 
-  setenv init_aero_type cons_droplet 
+  setenv init_aero_type prescribed
+  # setenv init_aero_type cons_droplet
   
 # User enter any needed modules to load or use below
 #  EXAMPLE:
@@ -99,7 +99,7 @@
 
   # Prescribed aerosol file path and name
   set presc_aero_path = atm/cam/chem/trop_mam/aero
-  set presc_aero_file = mam4_0.9x1.2_L72_2000clim_c170323.nc
+  set presc_aero_file = mam5_0.9x1.2_L80_F2010_c013024.nc
 
   set PROJECT=$projectname
 # set E3SMROOT=${code_dir}/${code_tag}
@@ -175,20 +175,19 @@
 # EAMv2 config options for SCM
 
   #set CAM_CONFIG_OPTS="-phys default -scam -nlev 72 -clubb_sgs"
-  # Below as used in nightly test
-  set CAM_CONFIG_OPTS="-mach pm-cpu -phys default -nlev 80 -clubb_sgs -microphys p3 -scam"
+  # Match the reusable Mac executable configured by the baseline PRECT/COSP run.
+  set CAM_CONFIG_OPTS="-phys default -scam -nlev 80 -clubb_sgs -microphys p3"
   if ($dycore == Eulerian) then
     set CAM_CONFIG_OPTS="$CAM_CONFIG_OPTS -nospmd -nosmp"
   endif
   
   if ( $do_cosp == true ) then
-    set  CAM_CONFIG_OPTS="$CAM_CONFIG_OPTS -cosp -verbose" 
+    set  CAM_CONFIG_OPTS="$CAM_CONFIG_OPTS -cosp -verbose"
   endif
 
 # CAM configure options dependant on what aerosol specification is used
-  if ($init_aero_type == cons_droplet) then 
-    # set CAM_CONFIG_OPTS="$CAM_CONFIG_OPTS -chem linoz_mam4_resus_mom_soag -rain_evap_to_coarse_aero -bc_dep_to_snow_updates" 
-    set CAM_CONFIG_OPTS="$CAM_CONFIG_OPTS -chem chemuci_linozv3_mam5_vbs -rain_evap_to_coarse_aero -vbs" 
+  if ($init_aero_type == cons_droplet) then
+    set CAM_CONFIG_OPTS="$CAM_CONFIG_OPTS -chem none"
   endif
 
   if ($init_aero_type == prescribed || $init_aero_type == observed) then
@@ -202,6 +201,7 @@
 # cld_macmic_num_steps to be consistent
   if ($dycore == SE) then
     ./xmlchange ATM_NCPL='48'
+    ./xmlchange CAM_TARGET='theta-l'
     set clubb_micro_steps = 6
   endif
 
@@ -210,18 +210,16 @@
 cat <<EOF >> user_nl_eam
  cld_macmic_num_steps = $clubb_micro_steps
  cosp_lite = .true.
- use_gw_front = .true.
+ use_gw_front = .false.
  iopfile = '$input_data_dir/$iop_path/$iop_file'
  mfilt = 10000
  nhtfrq = 1
  fincl1 = 'PRECT'
  scm_iop_srf_prop = $do_iop_srf_prop 
-!scm_relaxation = $do_scm_relaxation
+ iop_nudge_tq = $do_scm_relaxation
  iradlw = 1
  iradsw = 1
-! swrad_off = $do_turnoff_swrad 
-! lwrad_off = $do_turnoff_lwrad
-! precip_off = $do_turnoff_precip
+ precip_off = $do_turnoff_precip
  scmlat = $lat 
  scmlon = $lon
 EOF
@@ -232,21 +230,19 @@ EOF
 cat <<EOF >> user_nl_eam
 ! parameters need to be reset for v3
  use_hetfrz_classnuc = .true.
- micro_mg_dcs_tdep = .true.
  microp_aero_wsub_scheme = 1
- sscav_tuning = .true.
  convproc_do_aer = .true.
  demott_ice_nuc = .true.
  liqcf_fix = .true.
  regen_fix = .true.
- resus_fix = .false.
+ resus_fix = .true.
  mam_amicphys_optaa = 1
  fix_g1_err_ndrop = .true.
  ssalt_tuning = .true.
  use_rad_dt_cosz = .true.
  ice_sed_ai = 500
  cldfrc_dp1 = 0.045D0
- clubb_ice_deep = 1.6e-05
+ clubb_ice_deep = 14.e-6
  clubb_ice_sh = 5e-05
  clubb_liq_deep = 8e-06
  clubb_liq_sh = 1e-05
@@ -254,39 +250,39 @@ cat <<EOF >> user_nl_eam
  zmconv_c0_lnd = 0.007
  zmconv_c0_ocn = 0.007
  zmconv_dmpdz = -0.0007
- zmconv_ke = 1.5e-06
- zmconv_alfa = 0.10
- zmconv_tau = 3600.0
- effgw_oro = 0.25
- seasalt_emis_scale = 0.85
- dust_emis_fact = 2.05D0
+ zmconv_ke = 5.0E-6
+ zmconv_alfa = 0.14D0
+ effgw_oro = 0.375
+ seasalt_emis_scale = 0.55D0
+ dust_emis_fact = 13.8D0
  clubb_gamma_coef = 0.32
  clubb_C8 = 4.3
- clubb_beta = 2.4
  cldfrc2m_rhmaxi = 1.05D0
  clubb_c_K10 = 0.3
- effgw_beres = 0.4
+ effgw_beres = 0.35
  do_tms = .false.
- so4_sz_thresh_icenuc = 7.5e-08
- n_so4_monolayers_pcage = 8D0
- micro_mg_accre_enhan_fac = 1.5D0
+ so4_sz_thresh_icenuc = 0.080e-6
+ n_so4_monolayers_pcage = 8.0D0
  
  zmconv_tiedke_add = 0.8D0
  zmconv_cape_cin = 1
- zmconv_mx_bot_lyr_adj = 2
+ zmconv_mx_bot_lyr_adj = 1
  
  taubgnd = 2.50000000D-03
  clubb_C1 = 1.335
- clubb_C6rt = 4.0
  raytau0 = 5D0
- prc_coef1 = 30500D0
- prc_exp = 3.19D0
- prc_exp1 = -1.2D0
  se_ftype = 2
  clubb_C14 = 1.3D0
  relvar_fix = .true. 
- mg_prc_coeff_fix = .true.
- rrtmg_temp_fix = .true.
+ sol_factb_interstitial = 0.1D0
+ sol_facti_cloud_borne = 1.0D0
+ sol_factic_interstitial = 0.4D0
+ rad_climate = 'A:Q:H2O', 'N:O2:O2', 'N:CO2:CO2',
+        'N:ozone:O3', 'N:N2O:N2O', 'N:CH4:CH4',
+        'N:CFC11:CFC11', 'N:CFC12:CFC12',
+        'M:mam3_mode1:/Users/yunlong/projects/e3sm/inputdata/atm/cam/physprops/mam3_mode1_rrtmg_c110318.nc',
+        'M:mam3_mode2:/Users/yunlong/projects/e3sm/inputdata/atm/cam/physprops/mam3_mode2_rrtmg_c110318.nc',
+        'M:mam3_mode3:/Users/yunlong/projects/e3sm/inputdata/atm/cam/physprops/mam3_mode3_rrtmg_c110318.nc'
 EOF
 
 # if constant droplet was selected then modify name list to reflect this
@@ -340,6 +336,7 @@ set ELM_CONFIG_OPTS="-phys elm"
 
 # Modify the run start and duration parameters for the desired case
   ./xmlchange RUN_STARTDATE="$startdate",START_TOD="$start_in_sec",STOP_OPTION="$stop_option",STOP_N="$stop_n"
+  ./xmlchange CALENDAR="GREGORIAN"
 
 # Modify the latitude and longitude for the particular case
   ./xmlchange PTS_MODE="TRUE",PTS_LAT="$lat",PTS_LON="$lon"
@@ -361,20 +358,25 @@ set ELM_CONFIG_OPTS="-phys elm"
   ./xmlchange CICE_CONFIG_OPTS="-nodecomp -maxblocks 1 -nx 1 -ny 1"
 
 # Reuse a pre-built executable from the baseline case; skip rebuilding the model.
-  if (! $?TEMPLATE_EXE) then
-    if ($?TEMPLATE_EXE_MAC) then
-      setenv TEMPLATE_EXE $TEMPLATE_EXE_MAC
-    else
-      setenv TEMPLATE_EXE /Users/yunlong/Workshop/SCM-UQ-Workflow/e3sm_scm_run_scripts_baseline/baseline-output/scm_ARM97_baseline/build/e3sm.exe
+  set template_exe = ""
+  if ($?TEMPLATE_EXE_MAC) then
+    if ("$TEMPLATE_EXE_MAC" != "") set template_exe = "$TEMPLATE_EXE_MAC"
+  endif
+  if ("$template_exe" == "") then
+    if ($?TEMPLATE_EXE) then
+      if ("$TEMPLATE_EXE" != "") set template_exe = "$TEMPLATE_EXE"
     endif
   endif
-  set template_exe = $TEMPLATE_EXE
-  if (! -e $template_exe) then
+  if ("$template_exe" == "") then
+    echo "ERROR: set TEMPLATE_EXE_MAC or TEMPLATE_EXE to a compatible pre-built e3sm.exe"
+    exit 1
+  endif
+  if (! -e "$template_exe") then
     echo "ERROR: template executable not found: $template_exe"
     exit 1
   endif
   mkdir -p $case_build_dir
-  cp $template_exe $case_build_dir/e3sm.exe
+  cp "$template_exe" $case_build_dir/e3sm.exe
   if (-e /opt/homebrew/opt/openblas/lib/libopenblas.0.dylib) then
     install_name_tool -change @rpath/libopenblas.0.dylib /opt/homebrew/opt/openblas/lib/libopenblas.0.dylib $case_build_dir/e3sm.exe
   endif
