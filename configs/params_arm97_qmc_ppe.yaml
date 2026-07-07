@@ -1,0 +1,122 @@
+description: ARM97 QMC tuning parameters transcribed from tuning-parameters-from-PPE-paper.docx.
+source: /Users/yunlong/Documents/yl-groupmeeting-0529/tuning-parameters-from-PPE-paper.docx
+parameters:
+  - name: zmconv_c0_lnd
+    short_name: c0_lnd
+    baseline: 0.002
+    lower: 0.001
+    upper: 0.006
+    format: float
+    note: Deep convection precipitation efficiency over land; zm_conv; Qian15/Ma.
+  - name: zmconv_c0_ocn
+    short_name: c0_ocn
+    baseline: 0.002
+    lower: 0.001
+    upper: 0.006
+    format: float
+    note: Deep convection precipitation efficiency over ocean; zm_conv; Qian15/Ma.
+  - name: cldfrc_dp1
+    short_name: dp1
+    baseline: 0.1
+    lower: 0.02
+    upper: 0.1
+    format: D0
+    note: Deep convection cloud fraction parameter; clubb_intr; Ma.
+  - name: zmconv_dmpdz
+    short_name: dmpdz
+    baseline: -0.0005
+    lower: -0.002
+    upper: -0.0001
+    format: e
+    note: Parcel fractional mass entrainment rate; zm_conv; Qian15/Neale.
+  - name: zmconv_ke
+    short_name: ke
+    baseline: 0.000001
+    lower: 0.0000005
+    upper: 0.00001
+    format: E
+    note: Evaporation efficiency of precipitation; zm_conv; Qian15.
+  - name: zmconv_alfa
+    short_name: alfa
+    baseline: 0.10
+    lower: 0.05
+    upper: 0.60
+    format: D0
+    note: Maximum cloud downdraft mass flux fraction; zm_conv; Qian15.
+  - name: zmconv_tau
+    short_name: tau
+    baseline: 3600.0
+    lower: 1800.0
+    upper: 14400.0
+    format: float
+    note: Time scale for consumption rate deep CAPE; zm_conv; Qian15/Neale.
+  - name: ice_sed_ai
+    short_name: ai
+    baseline: 700.0
+    lower: 350.0
+    upper: 1400.0
+    format: float
+    note: Fall speed parameter for cloud ice; micro_mg_utils; Ma/Zhang.
+  - name: cldfrc2m_rhmaxi
+    short_name: rhmaxi
+    baseline: 1.0
+    lower: 1.0
+    upper: 1.1
+    format: D0
+    note: Max relative humidity threshold for ice cloud; cldfrc2m; Ma/Zhang.
+  - name: clubb_gamma_coef
+    short_name: gamma_coef
+    baseline: 0.32
+    lower: 0.1
+    upper: 0.5
+    format: float
+    note: Constant of the width of PDF in w coordinate; parameters_tunable; Guo15/Ma.
+  - name: clubb_C8
+    short_name: c8
+    baseline: 4.2
+    lower: 2.0
+    upper: 8.0
+    format: float
+    note: Constant associated with Newtonian damping; parameters_tunable; Guo15/Ma.
+  - name: clubb_beta
+    short_name: beta
+    baseline: 2.4
+    lower: 1.0
+    upper: 3.0
+    format: float
+    note: Constant related to skewness of theta_l and qt; parameters_tunable; Guo15/Ma.
+  - name: clubb_C2rt
+    short_name: c2rt
+    baseline: 1.0
+    lower: 0.5
+    upper: 2.0
+    format: D0
+    note: Constant with dissipation of variance of total water; parameters_tunable; Guo15/Ma.
+  - name: clubb_c_K10
+    short_name: c_k10
+    baseline: 0.6
+    lower: 0.3
+    upper: 1.2
+    format: float
+    note: Momentum diffusion factor; parameters_tunable; Ma.
+  - name: clubb_C1
+    short_name: c1
+    baseline: 1.0
+    lower: 1.0
+    upper: 5.0
+    format: float
+    note: Constant associated with dissipation of variance; parameters_tunable; Ma.
+  - name: clubb_C6rt
+    short_name: c6rt
+    baseline: 4.0
+    lower: 3.0
+    upper: 8.0
+    format: float
+    note: Low skewness of Newtonian damping of water flux; parameters_tunable; Qian.
+  - name: effgw_oro
+    short_name: effgw_oro
+    baseline: 0.3
+    lower: 0.1
+    upper: 0.4
+    format: float
+    note: Gravity wave drag intensity; gw_drag; Ma.

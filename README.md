@@ -288,6 +288,85 @@ Notes:
   `--case-prefix`, choose a new prefix or clean those old case directories
   deliberately before rerunning.
 
+## Demo 3: Run ARM97 QMC Design
+
+This demo generates a QMC parameter design for ARM97 and renders one full
+26-day ARM97 script per QMC sample. The QMC parameter set is stored in:
+
+```text
+configs/params_arm97_qmc_ppe.yaml
+```
+
+The parameters and ranges in that file come from the PPE tuning-parameter table.
+
+1. Configure local paths:
+
+```sh
+source .env
+```
+
+2. Generate the QMC design.
+
+This example generates 8 DigitalNetB2 QMC samples. With `--segment-mode
+full26day`, each sample is rendered as one full 26-day ARM97 script:
+
+```sh
+python3 src/workflows/generate_arm97_experiment.py \
+  --platform mac \
+  --experiment ARM97_qmc \
+  --design digitalnetb2 \
+  --n-samples 8 \
+  --seed 20260428 \
+  --params configs/params_arm97_qmc_ppe.yaml \
+  --template src/workflows/MAC_ARM97_implicit_stress_baseline.csh \
+  --segment-mode full26day \
+  --out-root cases/run_e3sm_scm_ARM97_qmc \
+  --output-layout case-dir \
+  --case-prefix run_e3sm_scm_ARM97_qmc \
+  --overwrite
+```
+
+Expected output:
+
+```text
+cases/run_e3sm_scm_ARM97_qmc/ARM97_qmc_samples.csv
+cases/run_e3sm_scm_ARM97_qmc/scripts/ARM97_qmc_script_manifest.csv
+cases/run_e3sm_scm_ARM97_qmc/scripts/*.csh
+```
+
+The samples CSV records the sampler, seed, sample index, formatted namelist
+values, and numeric parameter values used for analysis. With `--n-samples 8`
+and `--segment-mode full26day`, the generator writes 8 full-run scripts.
+
+3. Run the generated QMC scripts:
+
+```sh
+MANIFEST="cases/run_e3sm_scm_ARM97_qmc/scripts/ARM97_qmc_script_manifest.csv" \
+STATUS="cases/run_e3sm_scm_ARM97_qmc/scripts/experiment_run_status.csv" \
+MAX_JOBS=10 \
+./src/workflows/run_arm97_experiment_segments_parallel.zsh
+```
+
+Tune `MAX_JOBS` for the local machine before running larger QMC designs.
+
+4. Post-process the QMC outputs and extract metrics:
+
+```sh
+python3 src/workflows/postprocess_arm97_experiment.py \
+  --experiment-dir cases/run_e3sm_scm_ARM97_qmc \
+  --manifest cases/run_e3sm_scm_ARM97_qmc/scripts/ARM97_qmc_script_manifest.csv \
+  --samples cases/run_e3sm_scm_ARM97_qmc/ARM97_qmc_samples.csv \
+  --status cases/run_e3sm_scm_ARM97_qmc/scripts/experiment_run_status.csv \
+  --scm-runs "$SCM_RUNS"
+```
+
+Expected post-processed products:
+
+```text
+cases/run_e3sm_scm_ARM97_qmc/output/ARM97_qmc_*.nc
+cases/run_e3sm_scm_ARM97_qmc/metrics/
+```
+
 ## License
 
 This workflow code is released under the MIT License. See `LICENSE`.

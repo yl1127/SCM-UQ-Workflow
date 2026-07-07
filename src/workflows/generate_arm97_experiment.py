@@ -63,6 +63,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--params", default=str(ROOT / "configs/params_arm97_core.yaml"))
     parser.add_argument("--template")
     parser.add_argument("--out-root", default=str(ROOT / "arm97_experiments"))
+    parser.add_argument(
+        "--output-layout",
+        choices=["experiment-platform", "case-dir"],
+        default="experiment-platform",
+        help=(
+            "Output layout. experiment-platform writes <out-root>/<experiment>/<platform>/; "
+            "case-dir writes design CSVs in <out-root>/ and scripts in <out-root>/scripts/."
+        ),
+    )
     parser.add_argument("--case-prefix")
     parser.add_argument(
         "--segment-mode",
@@ -425,9 +434,14 @@ def main() -> None:
     if not experiment:
         raise ValueError("empty experiment name")
     case_prefix = args.case_prefix or f"{platform['case_prefix']}_{experiment}"
-    out_root = Path(args.out_root) / experiment / args.platform
-    script_dir = out_root / "scripts"
-    design_dir = out_root / "design"
+    if args.output_layout == "case-dir":
+        out_root = Path(args.out_root)
+        script_dir = out_root / "scripts"
+        design_dir = out_root
+    else:
+        out_root = Path(args.out_root) / experiment / args.platform
+        script_dir = out_root / "scripts"
+        design_dir = out_root / "design"
     if script_dir.exists() and any(script_dir.glob("*.csh")) and not args.overwrite:
         raise FileExistsError(f"{script_dir} already has scripts; use --overwrite")
     script_dir.mkdir(parents=True, exist_ok=True)
@@ -499,18 +513,30 @@ def main() -> None:
                 }
             )
 
-    write_csv(design_dir / f"{experiment}_samples.csv", sample_rows)
-    write_csv(design_dir / f"{experiment}_script_manifest.csv", manifest_rows)
-    write_csv(script_dir / f"{experiment}_script_manifest.csv", manifest_rows)
+    samples_path = design_dir / f"{experiment}_samples.csv"
+    script_manifest_path = script_dir / f"{experiment}_script_manifest.csv"
+    legacy_manifest_path = design_dir / f"{experiment}_script_manifest.csv"
+
+    write_csv(samples_path, sample_rows)
+    if args.output_layout == "case-dir":
+        if args.overwrite and legacy_manifest_path.exists():
+            legacy_manifest_path.unlink()
+    else:
+        write_csv(legacy_manifest_path, manifest_rows)
+    write_csv(script_manifest_path, manifest_rows)
     if args.platform == "nersc":
-        manifest_rel = f"design/{experiment}_script_manifest.csv"
+        manifest_rel = (
+            f"scripts/{experiment}_script_manifest.csv"
+            if args.output_layout == "case-dir"
+            else f"design/{experiment}_script_manifest.csv"
+        )
         write_nersc_setup_script(out_root / "setup_cases_nersc.sh", manifest_rel)
         write_nersc_run_script(out_root / "run_bundle_nersc.sh", manifest_rel, experiment)
     print(f"experiment: {experiment}")
     print(f"platform: {args.platform}")
     print(f"samples: {len(sample_rows)}")
     print(f"scripts: {len(manifest_rows)}")
-    print(design_dir / f"{experiment}_script_manifest.csv")
+    print(script_manifest_path)
 
 
 if __name__ == "__main__":

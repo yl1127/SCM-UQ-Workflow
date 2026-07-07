@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--samples", help="Samples CSV. Defaults to design/*_samples.csv.")
     parser.add_argument("--status", help="Run status CSV. Defaults to design/experiment_run_status.csv.")
     parser.add_argument("--scm-runs", default=os.environ.get("SCM_RUNS", "/path/to/SCM_runs"))
-    parser.add_argument("--stitched-dir", help="Output directory for stitched NetCDF files.")
+    parser.add_argument("--stitched-dir", help="Output directory for stitched/output NetCDF files.")
     parser.add_argument("--metrics-dir", help="Output directory for metrics CSVs.")
     parser.add_argument(
         "--stitch-backend",
@@ -194,8 +194,21 @@ def selected_records_for_sample(
     return selected
 
 
+def is_full26day_manifest(manifest: pd.DataFrame) -> bool:
+    return manifest["segment_index"].fillna("").astype(str).eq("").all()
+
+
+def output_file_name(sample_manifest: pd.DataFrame) -> str:
+    sample_case = str(sample_manifest["sample_case"].iloc[0])
+    if not is_full26day_manifest(sample_manifest):
+        return f"{sample_case}_stitched_26day.nc"
+    experiment = str(sample_manifest["experiment"].iloc[0])
+    sample_index = int(sample_manifest["sample_index"].iloc[0])
+    return f"{experiment}_{sample_index:03d}.nc"
+
+
 def stitch_sample(scm_runs: Path, stitched_dir: Path, sample_case: str, sample_manifest: pd.DataFrame) -> Path:
-    out_path = stitched_dir / f"{sample_case}_stitched_26day.nc"
+    out_path = stitched_dir / output_file_name(sample_manifest)
     selected = selected_records_for_sample(scm_runs, sample_manifest)
     total_records = sum(len(indices) for _, _, indices in selected)
 
@@ -254,7 +267,7 @@ def stitch_sample_nco(
     ncrcat: str,
     keep_temp: bool,
 ) -> Path:
-    out_path = stitched_dir / f"{sample_case}_stitched_26day.nc"
+    out_path = stitched_dir / output_file_name(sample_manifest)
     selected = selected_records_for_sample(scm_runs, sample_manifest)
     temp_dir = stitched_dir / "_nco_segments" / sample_case
     if temp_dir.exists():
@@ -316,7 +329,7 @@ def extract_metrics(sample_index: int, sample_case: str, path: Path) -> dict[str
     metrics: dict[str, Any] = {
         "sample_index": sample_index,
         "case": sample_case,
-        "stitched_file": str(path),
+        "output_file": str(path),
     }
     with Dataset(path) as ds:
         dts = output_datetimes(ds)
@@ -369,14 +382,16 @@ def main() -> None:
     samples_path = Path(args.samples) if args.samples else one_match("*_samples.csv", design_dir)
     status_path = Path(args.status) if args.status else design_dir / "experiment_run_status.csv"
     scm_runs = Path(args.scm_runs)
-    stitched_dir = Path(args.stitched_dir) if args.stitched_dir else experiment_dir / "stitched"
+    manifest = pd.read_csv(manifest_path)
+    samples = pd.read_csv(samples_path)
+
+    default_output_dir = "output" if is_full26day_manifest(manifest) else "stitched"
+    stitched_dir = Path(args.stitched_dir) if args.stitched_dir else experiment_dir / default_output_dir
     metrics_dir = Path(args.metrics_dir) if args.metrics_dir else experiment_dir / "metrics"
 
     stitched_dir.mkdir(parents=True, exist_ok=True)
     metrics_dir.mkdir(parents=True, exist_ok=True)
 
-    manifest = pd.read_csv(manifest_path)
-    samples = pd.read_csv(samples_path)
     validate_status(status_path, manifest, args.allow_missing_status)
 
     ncks = ncrcat = None
@@ -403,7 +418,7 @@ def main() -> None:
         else:
             out_path = stitch_sample(scm_runs, stitched_dir, sample_case, sample_manifest)
         metrics_rows.append(extract_metrics(int(sample_index), sample_case, out_path))
-        print(f"stitched sample {int(sample_index):03d}: {out_path}")
+        print(f"processed sample {int(sample_index):03d}: {out_path}")
 
     metrics = pd.DataFrame(metrics_rows)
     metrics_csv = metrics_dir / f"{experiment_dir.parent.name}_{experiment_dir.name}_metrics.csv"
