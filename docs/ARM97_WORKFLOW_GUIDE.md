@@ -135,12 +135,14 @@ Outputs:
 Current repository layout:
 
 - Generator templates are under `src/workflows/`.
+- The Mac platform default is `scripts_baseline/run_e3sm_scm_ARM97_0706.csh`.
 - Pass `--template src/workflows/MAC_ARM97_reuse_baseline.csh` or `--template src/workflows/ARM97_reuse_baseline.csh` only when you want to override the platform default.
 
 ## 3. Choose The Platform
 
 Files:
 
+- `scripts_baseline/run_e3sm_scm_ARM97_0706.csh`
 - `src/workflows/MAC_ARM97_reuse_baseline.csh`
 - `src/workflows/ARM97_reuse_baseline.csh`
 - `scripts_baseline/run_e3sm_scm_ARM97_prect_cosp.csh`
@@ -420,6 +422,7 @@ Plotting notes:
 
 Files:
 
+- `scripts_baseline/run_e3sm_scm_ARM97_0706.csh`
 - `src/workflows/MAC_ARM97_reuse_baseline.csh`
 - `src/workflows/ARM97_reuse_baseline.csh`
 

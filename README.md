@@ -367,6 +367,89 @@ cases/run_e3sm_scm_ARM97_qmc/output/ARM97_qmc_*.nc
 cases/run_e3sm_scm_ARM97_qmc/metrics/
 ```
 
+## Demo 4: ARM97 ML Trigger
+
+This demo runs one Mac ARM97 baseline case with the ML4ESM embedded CNN trigger
+enabled. It uses the current baseline physics configuration: EAM master-style
+`nlev 80`, prescribed aerosol, COSP enabled, and `PRECT` history output.
+
+The ML trigger path is Mac-only in this repository. Unlike the reusable
+executable workflow, this case builds a fresh E3SM executable after installing
+the ML4ESM `SourceMods` and Python bridge into the generated case.
+
+1. Configure local paths and ML4ESM settings:
+
+```sh
+source .env
+
+export SCM_RUNS="/Users/yunlong/projects/e3sm/SCM_runs"
+export E3SM_CODE_DIR="/Users/yunlong/projects/e3sm/E3SM"
+export SCM_UQ_EXTRA_PATH="/Users/yunlong/local/gcc11/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/anaconda3/bin"
+
+export ML4ESM_DIR="/Users/yunlong/Workshop/ML4ESM"
+export ML4ESM_PYTHON_BIN="/Users/yunlong/miniconda3/bin/python"
+```
+
+1. Generate one full 26-day ARM97 ML-trigger script:
+
+```sh
+python3 src/workflows/generate_arm97_experiment.py \
+  --platform mac \
+  --experiment arm97_ml_trigger_demo \
+  --design baseline \
+  --params configs/params_arm97_core.yaml \
+  --segment-mode full26day \
+  --enable-ml4esm \
+  --out-root arm97_experiments \
+  --case-prefix mac_ARM97_ml_trigger \
+  --overwrite
+```
+
+Expected generated files:
+
+```text
+arm97_experiments/arm97_ml_trigger_demo/mac/design/arm97_ml_trigger_demo_samples.csv
+arm97_experiments/arm97_ml_trigger_demo/mac/design/arm97_ml_trigger_demo_script_manifest.csv
+arm97_experiments/arm97_ml_trigger_demo/mac/scripts/mac_ARM97_ml_trigger_000.csh
+```
+
+3. Run the generated ML case:
+
+```sh
+arm97_experiments/arm97_ml_trigger_demo/mac/scripts/mac_ARM97_ml_trigger_000.csh
+```
+
+The script creates and runs this case:
+
+```text
+$SCM_RUNS/mac_ARM97_ml_trigger_000
+```
+
+Internally, when `ENABLE_ML4ESM=true`, the script:
+
+- copies `$ML4ESM_DIR/SourceMods/src.eam` into the case `SourceMods`;
+- verifies `ML4ESM_PYTHON_BIN` can import `numpy` and `torch`;
+- appends Python include and linker flags to `cmake_macros/gnu11_Mac.cmake`;
+- writes `ML4ESM_MODEL_DIR`, `ML4ESM_PYTHONHOME`, `ML4ESM_PYTHONPATH`, and
+  `DYLD_LIBRARY_PATH` into the case machine environment files;
+- runs `case.build` and `case.submit --no-batch`.
+
+4. Check the model output:
+
+```sh
+ls "$SCM_RUNS/mac_ARM97_ml_trigger_000/run"/*.eam.h0.*.nc
+```
+
+Notes:
+
+- Keep `--segment-mode full26day` for this demo so only one ML-enabled case is
+  built and run.
+- `--enable-ml4esm` writes `setenv ENABLE_ML4ESM true` into the generated
+  `.csh` script, so the run does not depend on exporting that variable in the
+  shell.
+- This demo currently targets Mac only; NERSC ML-trigger support has not been
+  wired into the workflow templates.
+
 ## License
 
 This workflow code is released under the MIT License. See `LICENSE`.

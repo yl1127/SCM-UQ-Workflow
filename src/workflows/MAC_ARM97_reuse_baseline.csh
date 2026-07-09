@@ -24,6 +24,20 @@
   # Code tag name. Not used
   setenv code_tag E3SM_codetag   
 
+  # Optional ML4ESM embedded CNN trigger support.  Leave disabled for the
+  # default reusable-executable baseline workflow.
+  if (! $?ENABLE_ML4ESM) setenv ENABLE_ML4ESM false
+  if (! $?ML4ESM_DIR) setenv ML4ESM_DIR /path/to/ML4ESM
+  if (! $?ML4ESM_PYTHON_BIN) setenv ML4ESM_PYTHON_BIN /opt/anaconda3/bin/python
+  set use_ml4esm = false
+  if ("$ENABLE_ML4ESM" == "true" || "$ENABLE_ML4ESM" == "TRUE" || "$ENABLE_ML4ESM" == "1") then
+    set use_ml4esm = true
+  endif
+  if ($use_ml4esm == true) then
+    if ($?PYTHONHOME) unsetenv PYTHONHOME
+    if ($?PYTHONPATH) unsetenv PYTHONPATH
+  endif
+
   # Name of machine you are running on (i.e. edison, anvil, etc)                                                    
   setenv machine Mac
 
@@ -252,11 +266,13 @@ cat <<EOF >> user_nl_eam
  zmconv_dmpdz = -0.0007
  zmconv_ke = 5.0E-6
  zmconv_alfa = 0.14D0
+ zmconv_tau = 3600.0
  effgw_oro = 0.375
  seasalt_emis_scale = 0.55D0
  dust_emis_fact = 13.8D0
  clubb_gamma_coef = 0.32
  clubb_C8 = 4.3
+ clubb_beta = 2.4
  cldfrc2m_rhmaxi = 1.05D0
  clubb_c_K10 = 0.3
  effgw_beres = 0.35
@@ -270,6 +286,7 @@ cat <<EOF >> user_nl_eam
  
  taubgnd = 2.50000000D-03
  clubb_C1 = 1.335
+ clubb_C6rt = 4.0
  raytau0 = 5D0
  se_ftype = 2
  clubb_C14 = 1.3D0
@@ -344,6 +361,59 @@ set ELM_CONFIG_OPTS="-phys elm"
 
   ./case.setup 
 
+  if ($use_ml4esm == true) then
+    if (! -d "$ML4ESM_DIR/SourceMods/src.eam") then
+      echo "ERROR: ML4ESM SourceMods not found: $ML4ESM_DIR/SourceMods/src.eam"
+      exit 1
+    endif
+    if (! -x "$ML4ESM_PYTHON_BIN") then
+      echo "ERROR: ML4ESM_PYTHON_BIN is not executable: $ML4ESM_PYTHON_BIN"
+      exit 1
+    endif
+
+    mkdir -p SourceMods/src.eam
+    cp -R ${ML4ESM_DIR}/SourceMods/src.eam/. SourceMods/src.eam/
+
+    $ML4ESM_PYTHON_BIN -c "import numpy, torch"
+    if ($status != 0) then
+      echo "ERROR: ML4ESM_PYTHON_BIN must point to a Python with numpy and torch: $ML4ESM_PYTHON_BIN"
+      exit 2
+    endif
+
+    set py_includes = `$ML4ESM_PYTHON_BIN -c "import sysconfig; inc=sysconfig.get_config_var('INCLUDEPY') or sysconfig.get_paths().get('include'); print('-I' + inc)"`
+    set py_ldflags = `$ML4ESM_PYTHON_BIN -c "import sysconfig; libdir=sysconfig.get_config_var('LIBDIR') or ''; version=sysconfig.get_config_var('VERSION') or ''; print('-L%s -Wl,-rpath,%s -lpython%s -ldl -framework CoreFoundation' % (libdir, libdir, version))"`
+    set py_libdir = `$ML4ESM_PYTHON_BIN -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR') or '')"`
+    set py_prefix = `$ML4ESM_PYTHON_BIN -c "import sys; print(sys.prefix)"`
+
+cat <<EOF >> cmake_macros/gnu11_Mac.cmake
+
+# ML4ESM embedded Python bridge
+string(APPEND CMAKE_C_FLAGS " $py_includes")
+string(APPEND CMAKE_EXE_LINKER_FLAGS " -Wl,-rpath,$py_libdir $py_ldflags")
+EOF
+
+    setenv ML4ESM_MODEL_DIR ${case_scripts_dir}/SourceMods/src.eam/pytorch_1124
+    setenv ML4ESM_PYTHONHOME $py_prefix
+    setenv ML4ESM_PYTHONPATH ${case_scripts_dir}/SourceMods/src.eam
+    if ($py_libdir != "") then
+      setenv DYLD_LIBRARY_PATH ${py_libdir}
+    endif
+
+cat <<EOF >> .env_mach_specific.sh
+export ML4ESM_MODEL_DIR="${case_scripts_dir}/SourceMods/src.eam/pytorch_1124"
+export ML4ESM_PYTHONHOME="$py_prefix"
+export ML4ESM_PYTHONPATH="${case_scripts_dir}/SourceMods/src.eam"
+export DYLD_LIBRARY_PATH="$py_libdir"
+EOF
+
+cat <<EOF >> .env_mach_specific.csh
+setenv ML4ESM_MODEL_DIR "${case_scripts_dir}/SourceMods/src.eam/pytorch_1124"
+setenv ML4ESM_PYTHONHOME "$py_prefix"
+setenv ML4ESM_PYTHONPATH "${case_scripts_dir}/SourceMods/src.eam"
+setenv DYLD_LIBRARY_PATH "$py_libdir"
+EOF
+  endif
+
 # Don't want to write restarts as this appears to be broken for 
 #  CICE model in SCM.  For now set this to a high value to avoid
   ./xmlchange PIO_TYPENAME="netcdf"
@@ -357,30 +427,34 @@ set ELM_CONFIG_OPTS="-phys elm"
   ./xmlchange --id CICE_MXBLCKS --val 1
   ./xmlchange CICE_CONFIG_OPTS="-nodecomp -maxblocks 1 -nx 1 -ny 1"
 
-# Reuse a pre-built executable from the baseline case; skip rebuilding the model.
-  set template_exe = ""
-  if ($?TEMPLATE_EXE_MAC) then
-    if ("$TEMPLATE_EXE_MAC" != "") set template_exe = "$TEMPLATE_EXE_MAC"
-  endif
-  if ("$template_exe" == "") then
-    if ($?TEMPLATE_EXE) then
-      if ("$TEMPLATE_EXE" != "") set template_exe = "$TEMPLATE_EXE"
+  if ($use_ml4esm == true) then
+    ./case.build
+  else
+  # Reuse a pre-built executable from the baseline case; skip rebuilding the model.
+    set template_exe = ""
+    if ($?TEMPLATE_EXE_MAC) then
+      if ("$TEMPLATE_EXE_MAC" != "") set template_exe = "$TEMPLATE_EXE_MAC"
     endif
+    if ("$template_exe" == "") then
+      if ($?TEMPLATE_EXE) then
+        if ("$TEMPLATE_EXE" != "") set template_exe = "$TEMPLATE_EXE"
+      endif
+    endif
+    if ("$template_exe" == "") then
+      echo "ERROR: set TEMPLATE_EXE_MAC or TEMPLATE_EXE to a compatible pre-built e3sm.exe"
+      exit 1
+    endif
+    if (! -e "$template_exe") then
+      echo "ERROR: template executable not found: $template_exe"
+      exit 1
+    endif
+    mkdir -p $case_build_dir
+    cp "$template_exe" $case_build_dir/e3sm.exe
+    if (-e /opt/homebrew/opt/openblas/lib/libopenblas.0.dylib) then
+      install_name_tool -change @rpath/libopenblas.0.dylib /opt/homebrew/opt/openblas/lib/libopenblas.0.dylib $case_build_dir/e3sm.exe
+    endif
+    ./xmlchange BUILD_COMPLETE=TRUE
   endif
-  if ("$template_exe" == "") then
-    echo "ERROR: set TEMPLATE_EXE_MAC or TEMPLATE_EXE to a compatible pre-built e3sm.exe"
-    exit 1
-  endif
-  if (! -e "$template_exe") then
-    echo "ERROR: template executable not found: $template_exe"
-    exit 1
-  endif
-  mkdir -p $case_build_dir
-  cp "$template_exe" $case_build_dir/e3sm.exe
-  if (-e /opt/homebrew/opt/openblas/lib/libopenblas.0.dylib) then
-    install_name_tool -change @rpath/libopenblas.0.dylib /opt/homebrew/opt/openblas/lib/libopenblas.0.dylib $case_build_dir/e3sm.exe
-  endif
-  ./xmlchange BUILD_COMPLETE=TRUE
 
 # Submit case to queue if set, else submit
 #   via the case.run script

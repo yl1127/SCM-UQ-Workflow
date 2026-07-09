@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 PLATFORMS = {
     "mac": {
-        "template": ROOT / "src/workflows/MAC_ARM97_reuse_baseline.csh",
+        "template": ROOT / "scripts_baseline/run_e3sm_scm_ARM97_0708.csh",
         "case_prefix": "mac_ARM97",
         "script_dir_prefix": "e3sm_scm_mac",
     },
@@ -84,6 +84,11 @@ def parse_args() -> argparse.Namespace:
         help="Add one baseline sample before the perturbed samples.",
     )
     parser.add_argument(
+        "--enable-ml4esm",
+        action="store_true",
+        help="Render generated case scripts with ENABLE_ML4ESM=true.",
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         help="Overwrite existing scripts for this experiment.",
@@ -111,6 +116,33 @@ def replace_one(text: str, pattern: str, replacement: str) -> str:
     if count != 1:
         raise RuntimeError(f"expected one replacement for pattern: {pattern}")
     return text
+
+
+def parse_fortran_float(value: str) -> float | None:
+    token = value.strip().split()[0] if value.strip() else ""
+    token = token.rstrip(",")
+    try:
+        return float(token.replace("D", "E").replace("d", "e"))
+    except ValueError:
+        return None
+
+
+def replace_namelist_value(text: str, name: str, value: str) -> str:
+    pattern = rf"^(\s*){re.escape(name)}\s*=\s*([^!\n]*)(.*)$"
+    matches = list(re.finditer(pattern, text, flags=re.MULTILINE))
+    if not matches:
+        raise RuntimeError(f"expected at least one replacement for pattern: {pattern}")
+    target = parse_fortran_float(value)
+
+    def replacement(match: re.Match[str]) -> str:
+        current = parse_fortran_float(match.group(2))
+        if current is not None and target is not None and math.isclose(
+            current, target, rel_tol=0.0, abs_tol=1.0e-14
+        ):
+            return match.group(0)
+        return f"{match.group(1)}{name} = {value}{match.group(3)}"
+
+    return re.sub(pattern, replacement, text, flags=re.MULTILINE)
 
 
 def seconds_of_day(dt: datetime) -> int:
@@ -258,28 +290,31 @@ def render_script(
     start: datetime,
     stop_option: str,
     stop_n: int,
+    enable_ml4esm: bool = False,
 ) -> str:
     text = template
     text = replace_one(text, r"^\s*setenv casename .*$", f"  setenv casename {case_name}")
+    if enable_ml4esm:
+        text = replace_one(
+            text,
+            r"^\s*if \(! \$\?ENABLE_ML4ESM\) setenv ENABLE_ML4ESM .*$",
+            "  setenv ENABLE_ML4ESM true",
+        )
     text = replace_one(
         text,
-        r"^\s*set startdate = .*$",
-        f"  set startdate = {start:%Y-%m-%d} # Experiment start date",
+        r"^(\s*set startdate = )\S+(\s*.*)$",
+        rf"\g<1>{start:%Y-%m-%d}\g<2>",
     )
     text = replace_one(
         text,
-        r"^\s*set start_in_sec = .*$",
-        f"  set start_in_sec = {seconds_of_day(start)} # Experiment start time in seconds",
+        r"^(\s*set start_in_sec = )\S+(\s*.*)$",
+        rf"\g<1>{seconds_of_day(start)}\g<2>",
     )
     text = replace_one(text, r"^\s*set stop_option = .*$", f"  set stop_option = {stop_option}")
     text = replace_one(text, r"^\s*set stop_n = .*$", f"  set stop_n = {stop_n}")
     for param in params:
         name = param["name"]
-        text = replace_one(
-            text,
-            rf"^(\s*){re.escape(name)}\s*=.*$",
-            rf"\g<1>{name} = {sample[name]}",
-        )
+        text = replace_namelist_value(text, name, sample[name])
     return text
 
 
@@ -489,7 +524,16 @@ def main() -> None:
                 keep_end = keep_start + timedelta(hours=KEEP_HOURS)
             script_path = script_dir / script_name
             script_path.write_text(
-                render_script(template, case_name, params, sample, start, stop_option, stop_n)
+                render_script(
+                    template,
+                    case_name,
+                    params,
+                    sample,
+                    start,
+                    stop_option,
+                    stop_n,
+                    enable_ml4esm=args.enable_ml4esm,
+                )
             )
             script_path.chmod(0o755)
             manifest_rows.append(
