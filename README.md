@@ -450,6 +450,163 @@ Notes:
 - This demo currently targets Mac only; NERSC ML-trigger support has not been
   wired into the workflow templates.
 
+## Demo 5: Run ARM97 QMC with Stitched Setting
+
+This demo generates and runs 64 ARM97 DigitalNetB2 QMC members using the
+stitched setting recommended for model evaluation. It reuses one compatible
+Mac `e3sm.exe` for every segment instead of compiling E3SM 1,664 times. No
+baseline member is generated; use the stitched baseline from Demo 2 if a
+default-run comparison is needed.
+
+The active E3SMv3/P3 parameter set is stored in:
+
+```text
+configs/params_arm97_e3smv3_qmc_ppe_active.yaml
+```
+
+It contains 27 perturbed parameters after excluding `zmconv_c0_lnd`,
+`zmconv_c0_ocn`, `ice_sed_ai`, and `cloud_reffi_zmdetr`. The last parameter was
+not present in the runnable source YAML, ARM97 template, or local E3SM namelist.
+
+Each QMC member contains 26 independent 36-hour segments. The first 12 hours of
+each segment are discarded as spin-up and the following 24 hours are retained,
+producing one continuous 26-day stitched output per member.
+
+1. Configure the local paths and select the reusable executable:
+
+```sh
+source .env
+
+export TEMPLATE_EXE_MAC="/Users/yunlong/projects/e3sm/SCM_runs/run_e3sm_scm_ARM97_qmc64_0708_000/build/e3sm.exe"
+test -x "$TEMPLATE_EXE_MAC"
+```
+
+The executable above was built with the same 0708 ARM97 configuration used by
+this demo. Reuse is appropriate because all 27 perturbations are EAM namelist
+parameters, not compile-time options. Use a freshly built executable instead
+if the E3SM source, machine architecture, compiler libraries, grid, number of
+levels, P3/COSP configuration, or `SourceMods` have changed. In particular, an
+ML4ESM executable must not be substituted for this non-ML experiment.
+
+Demo 5 uses `scripts_baseline/run_e3sm_scm_ARM97_0713.csh`, which preserves the
+0708 ARM97 namelist and output configuration while adding executable reuse.
+When `TEMPLATE_EXE_MAC` (or the fallback `TEMPLATE_EXE`) is set, the 0713
+template copies that executable into each case and marks the build complete.
+If neither variable is set, it runs `case.build`. The original 0708 template is
+kept unchanged and always builds a fresh executable.
+
+2. Regenerate the 64-member stitched QMC experiment:
+
+```sh
+python3 src/workflows/generate_arm97_experiment.py \
+  --platform mac \
+  --experiment arm97_qmc64_stitched_demo \
+  --design digitalnetb2 \
+  --n-samples 64 \
+  --seed 20260709 \
+  --params configs/params_arm97_e3smv3_qmc_ppe_active.yaml \
+  --template scripts_baseline/run_e3sm_scm_ARM97_0713.csh \
+  --segment-mode 52x1.5day \
+  --out-root cases \
+  --case-prefix run_ARM97_qmc64_stitched_0713 \
+  --overwrite
+```
+
+The generated experiment is written under:
+
+```text
+cases/arm97_qmc64_stitched_demo/mac/
+```
+
+Rerun this command even if the scripts were generated previously: scripts
+created before executable reuse was enabled still contain the old template and
+will call `case.build`. `--overwrite` replaces generated scripts but does not
+remove existing case directories under `$SCM_RUNS`.
+
+The command generates samples 0 through 63, all from DigitalNetB2. Each sample
+has 26 segment scripts, for 1,664 scripts in total. There is no
+`sample_kind=baseline` row because `--include-baseline` is intentionally not
+used.
+
+3. Check the generated design before starting the model runs:
+
+```sh
+EXPERIMENT_DIR="cases/arm97_qmc64_stitched_demo/mac"
+SAMPLES="$EXPERIMENT_DIR/design/arm97_qmc64_stitched_demo_samples.csv"
+MANIFEST="$EXPERIMENT_DIR/design/arm97_qmc64_stitched_demo_script_manifest.csv"
+
+tail -n +2 "$SAMPLES" | wc -l
+tail -n +2 "$MANIFEST" | wc -l
+find "$EXPERIMENT_DIR/scripts" -type f -name '*.csh' | wc -l
+cut -d, -f8 "$SAMPLES" | tail -n +2 | grep -cx baseline || true
+grep -l 'TEMPLATE_EXE_MAC' "$EXPERIMENT_DIR"/scripts/*.csh | wc -l
+```
+
+The expected counts are 64 sample rows, 1,664 manifest rows, and 1,664 C-shell
+scripts. The baseline match count must be zero, and all 1,664 scripts should
+contain the executable-reuse branch. Generated case names range from:
+
+```text
+run_ARM97_qmc64_stitched_0713_000_seg_000
+run_ARM97_qmc64_stitched_0713_063_seg_025
+```
+
+4. Run the generated segment scripts:
+
+```sh
+MANIFEST="cases/arm97_qmc64_stitched_demo/mac/design/arm97_qmc64_stitched_demo_script_manifest.csv" \
+STATUS="cases/arm97_qmc64_stitched_demo/mac/design/experiment_run_status.csv" \
+MAX_JOBS=10 \
+./src/workflows/run_arm97_experiment_segments_parallel.zsh
+```
+
+`MAX_JOBS` controls the number of segment cases run concurrently within each
+sample. Reduce it if the Mac runs out of memory or compiler/runtime resources.
+The runner records every attempted case in the status CSV. A recorded failed
+case is not automatically retried; resolve its error and deliberately handle
+the old case directory and retry status before rerunning it. Reusing the
+executable avoids roughly two minutes of compilation per segment; a practical
+estimate for the complete experiment with `MAX_JOBS=10` is about 1--3 hours,
+although case setup, disk I/O, and available memory can change this substantially.
+
+5. Stitch the segment outputs and extract metrics:
+
+```sh
+python3 src/workflows/postprocess_arm97_experiment.py \
+  --experiment-dir cases/arm97_qmc64_stitched_demo/mac \
+  --manifest cases/arm97_qmc64_stitched_demo/mac/design/arm97_qmc64_stitched_demo_script_manifest.csv \
+  --samples cases/arm97_qmc64_stitched_demo/mac/design/arm97_qmc64_stitched_demo_samples.csv \
+  --status cases/arm97_qmc64_stitched_demo/mac/design/experiment_run_status.csv \
+  --scm-runs "$SCM_RUNS" \
+  --stitch-backend nco
+```
+
+The NCO backend requires `ncks` and `ncrcat` on `PATH`. Set `NCKS` and
+`NCRCAT`, or pass `--ncks` and `--ncrcat`, if they are installed elsewhere.
+
+6. Check the stitched products and metrics:
+
+```sh
+EXPERIMENT_DIR="cases/arm97_qmc64_stitched_demo/mac"
+
+find "$EXPERIMENT_DIR/stitched" -type f -name '*_stitched_26day.nc' | wc -l
+ls -lh "$EXPERIMENT_DIR/stitched"/run_ARM97_qmc64_stitched_0713_*_stitched_26day.nc
+ls -lh "$EXPERIMENT_DIR/metrics"/arm97_qmc64_stitched_demo_mac_metrics.csv
+ls -lh "$EXPERIMENT_DIR/metrics"/arm97_qmc64_stitched_demo_mac_parameter_response.csv
+```
+
+The expected stitched count is 64. Each output is named
+`run_ARM97_qmc64_stitched_0713_<sample>_stitched_26day.nc`.
+
+Notes:
+
+- Despite the CLI name `52x1.5day`, the current implementation renders 26 daily
+  segment cases per sample for the 26-day ARM97 window.
+- Existing case directories can block reruns and should only be renamed or
+  removed deliberately.
+- This is a production-size experiment: 64 samples times 26 segments equals
+  1,664 SCM cases.
+
 ## License
 
 This workflow code is released under the MIT License. See `LICENSE`.

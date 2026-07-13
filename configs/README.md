@@ -2,6 +2,28 @@
 
 This folder contains YAML parameter sets used by the ARM97 SCM PPE/QMC workflow.
 
+## Active 27-Parameter QMC Set
+
+`params_arm97_e3smv3_qmc_ppe_active.yaml` is the runnable parameter set for
+the 64-member stitched QMC experiment documented in Demo 5 of the repository
+README. It is derived from the merged 30-parameter E3SMv3 table below, with the
+following four parameters excluded after the July 9 hybrid modeling meeting:
+
+- `zmconv_c0_lnd`
+- `zmconv_c0_ocn`
+- `ice_sed_ai`
+- `cloud_reffi_zmdetr`
+
+The first three entries were removed from the merged YAML. The fourth entry,
+`cloud_reffi_zmdetr`, was never included in the runnable YAML and is not found
+in the current ARM97 templates or local E3SM namelist definitions. The active
+file therefore contains 27 perturbed parameters and retains
+`cldfrc2m_rhmaxi`.
+
+Baseline values in the active YAML match the current Mac ARM97 template and
+remain as metadata required by the workflow schema. Demo 5 does not use
+`--include-baseline` and generates only the 64 DigitalNetB2 QMC members.
+
 ## E3SMv3 Merged PPE Parameters
 
 Source file: `params_arm97_e3smv3_qmc_ppe.yaml`
